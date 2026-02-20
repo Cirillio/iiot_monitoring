@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/core/storage/prefs_provider.dart';
 import 'src/core/theme/app_theme.dart';
+import 'src/core/theme/theme_provider.dart';
 import 'src/features/main/presentation/main_layout.dart';
 
 void main() async {
@@ -20,15 +21,18 @@ void main() async {
   );
 }
 
-class IiotMonitoringApp extends StatelessWidget {
+class IiotMonitoringApp extends ConsumerWidget {
   const IiotMonitoringApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
+
     return MaterialApp(
       title: 'IIoT Monitoring',
-      theme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
       debugShowCheckedModeBanner: false,
       home: const MainLayout(),
     );

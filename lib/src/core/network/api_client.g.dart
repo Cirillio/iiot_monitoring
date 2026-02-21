@@ -9,6 +9,46 @@ part of 'api_client.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(baseUrl)
+final baseUrlProvider = BaseUrlProvider._();
+
+final class BaseUrlProvider extends $FunctionalProvider<String, String, String>
+    with $Provider<String> {
+  BaseUrlProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'baseUrlProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$baseUrlHash();
+
+  @$internal
+  @override
+  $ProviderElement<String> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  String create(Ref ref) {
+    return baseUrl(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(String value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
+  }
+}
+
+String _$baseUrlHash() => r'4ee21e284fdfbfecb53988c1185c884331915239';
+
 @ProviderFor(dio)
 final dioProvider = DioProvider._();
 
@@ -47,4 +87,4 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$dioHash() => r'b6f9e6d4cea309548f65e13d81fec0012c3c0b1a';
+String _$dioHash() => r'17a81ef6acfb1e2ab742142ed5192ce0170533cb';

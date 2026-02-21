@@ -7,7 +7,18 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Text('Дашборд').center(),
+      body: FilledButton.icon(
+        onPressed: () {},
+        label: const Text('label'),
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+            if (states.contains(WidgetState.pressed)) {
+              return Theme.of(context).colorScheme.error;
+            }
+            return Colors.black;
+          }),
+        ),
+      ).center(),
     );
   }
 }

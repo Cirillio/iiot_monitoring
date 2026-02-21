@@ -23,20 +23,20 @@ class IIoTSwitch extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 100),
+            duration: const Duration(milliseconds: 50),
             curve: Curves.easeInOut,
             width: 44,
             height: 24,
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               color: value
-                  ? primary.withAlpha(33)
+                  ? primary.withValues(alpha: 0.15)
                   : theme.colorScheme.surfaceDim,
               borderRadius: BorderRadius.circular(32),
             ),
             child: AnimatedAlign(
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeInOutCubic,
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeInOut,
               alignment: value ? Alignment.centerRight : Alignment.centerLeft,
               child: Container(
                 width: 18,

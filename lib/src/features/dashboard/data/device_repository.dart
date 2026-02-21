@@ -13,7 +13,7 @@ class DeviceRepository {
 
   Future<List<Device>> getDevices() async {
     try {
-      final response = await _dio.get('/api/Devices');
+      final response = await _dio.get('/api/dashboard');
       final List<dynamic> data = response.data;
       return data.map((json) => Device.fromJson(json)).toList();
     } on DioException catch (e) {

@@ -47,7 +47,7 @@ final class BaseUrlProvider extends $FunctionalProvider<String, String, String>
   }
 }
 
-String _$baseUrlHash() => r'4ee21e284fdfbfecb53988c1185c884331915239';
+String _$baseUrlHash() => r'9706a3fb89af0cd60c697dd32c118c93ba508ef5';
 
 @ProviderFor(dio)
 final dioProvider = DioProvider._();

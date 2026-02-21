@@ -37,25 +37,37 @@ class SignalRService {
   }
 
   void _handleReceiveMetrics(List<Object?>? arguments) {
-    if (arguments == null || arguments.isEmpty) return;
+    if (arguments == null || arguments.isEmpty) {
+      _logger.warning('ReceiveMetrics received with empty arguments');
+      return;
+    }
 
     try {
       final jsonString = arguments[0] as String;
+      _logger.fine('Raw metric received: $jsonString');
       final metric = Metric.fromJson(jsonDecode(jsonString));
       _metricsController.add(metric);
-    } catch (e) {
-      _logger.severe('Error parsing ReceiveMetrics data: $e');
+    } catch (e, stack) {
+      _logger.severe('Error parsing ReceiveMetrics data: $e', e, stack);
     }
   }
 
   Future<void> start() async {
-    if (_hubConnection.state == HubConnectionState.Connected) return;
+    _logger.info(
+      'Attempting to start SignalR connection. Current state: ${_hubConnection.state}',
+    );
+
+    if (_hubConnection.state == HubConnectionState.Connected) {
+      _logger.info('SignalR connection already connected');
+      return;
+    }
 
     try {
+      _logger.info('Starting SignalR connection...');
       await _hubConnection.start();
-      _logger.info('SignalR connection started');
-    } catch (e) {
-      _logger.severe('Error starting SignalR connection: $e');
+      _logger.info('SignalR connection started successfully');
+    } catch (e, stack) {
+      _logger.severe('Error starting SignalR connection: $e', e, stack);
       // Повторная попытка через 5 секунд в случае неудачи при старте
       Future.delayed(const Duration(seconds: 5), start);
     }
@@ -73,7 +85,7 @@ class SignalRService {
 SignalRService signalRService(Ref ref) {
   final baseUrl = ref.watch(baseUrlProvider);
   final service = SignalRService(baseUrl);
-  
+
   ref.onDispose(() {
     service.dispose();
   });

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Sensor {
 
- int get sensorId; int get deviceId; String get name; int get sensorDataType; String? get unit; SensorUiConfig? get uiConfigJson;@JsonKey(includeFromJson: false, includeToJson: false) double? get currentValue;
+ int get sensorId; int? get deviceId; int? get portNumber; String? get name; String? get slug; int get sensorDataType; String? get unit; SensorUiConfig? get uiConfigJson; DateTime? get updatedAt;@JsonKey(includeFromJson: false, includeToJson: false) double? get currentValue;
 /// Create a copy of Sensor
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SensorCopyWith<Sensor> get copyWith => _$SensorCopyWithImpl<Sensor>(this as Sen
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Sensor&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.name, name) || other.name == name)&&(identical(other.sensorDataType, sensorDataType) || other.sensorDataType == sensorDataType)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.uiConfigJson, uiConfigJson) || other.uiConfigJson == uiConfigJson)&&(identical(other.currentValue, currentValue) || other.currentValue == currentValue));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Sensor&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.portNumber, portNumber) || other.portNumber == portNumber)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.sensorDataType, sensorDataType) || other.sensorDataType == sensorDataType)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.uiConfigJson, uiConfigJson) || other.uiConfigJson == uiConfigJson)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.currentValue, currentValue) || other.currentValue == currentValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,sensorId,deviceId,name,sensorDataType,unit,uiConfigJson,currentValue);
+int get hashCode => Object.hash(runtimeType,sensorId,deviceId,portNumber,name,slug,sensorDataType,unit,uiConfigJson,updatedAt,currentValue);
 
 @override
 String toString() {
-  return 'Sensor(sensorId: $sensorId, deviceId: $deviceId, name: $name, sensorDataType: $sensorDataType, unit: $unit, uiConfigJson: $uiConfigJson, currentValue: $currentValue)';
+  return 'Sensor(sensorId: $sensorId, deviceId: $deviceId, portNumber: $portNumber, name: $name, slug: $slug, sensorDataType: $sensorDataType, unit: $unit, uiConfigJson: $uiConfigJson, updatedAt: $updatedAt, currentValue: $currentValue)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SensorCopyWith<$Res>  {
   factory $SensorCopyWith(Sensor value, $Res Function(Sensor) _then) = _$SensorCopyWithImpl;
 @useResult
 $Res call({
- int sensorId, int deviceId, String name, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson,@JsonKey(includeFromJson: false, includeToJson: false) double? currentValue
+ int sensorId, int? deviceId, int? portNumber, String? name, String? slug, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson, DateTime? updatedAt,@JsonKey(includeFromJson: false, includeToJson: false) double? currentValue
 });
 
 
@@ -65,15 +65,18 @@ class _$SensorCopyWithImpl<$Res>
 
 /// Create a copy of Sensor
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? sensorId = null,Object? deviceId = null,Object? name = null,Object? sensorDataType = null,Object? unit = freezed,Object? uiConfigJson = freezed,Object? currentValue = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? sensorId = null,Object? deviceId = freezed,Object? portNumber = freezed,Object? name = freezed,Object? slug = freezed,Object? sensorDataType = null,Object? unit = freezed,Object? uiConfigJson = freezed,Object? updatedAt = freezed,Object? currentValue = freezed,}) {
   return _then(_self.copyWith(
 sensorId: null == sensorId ? _self.sensorId : sensorId // ignore: cast_nullable_to_non_nullable
-as int,deviceId: null == deviceId ? _self.deviceId : deviceId // ignore: cast_nullable_to_non_nullable
-as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,sensorDataType: null == sensorDataType ? _self.sensorDataType : sensorDataType // ignore: cast_nullable_to_non_nullable
+as int,deviceId: freezed == deviceId ? _self.deviceId : deviceId // ignore: cast_nullable_to_non_nullable
+as int?,portNumber: freezed == portNumber ? _self.portNumber : portNumber // ignore: cast_nullable_to_non_nullable
+as int?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String?,sensorDataType: null == sensorDataType ? _self.sensorDataType : sensorDataType // ignore: cast_nullable_to_non_nullable
 as int,unit: freezed == unit ? _self.unit : unit // ignore: cast_nullable_to_non_nullable
 as String?,uiConfigJson: freezed == uiConfigJson ? _self.uiConfigJson : uiConfigJson // ignore: cast_nullable_to_non_nullable
-as SensorUiConfig?,currentValue: freezed == currentValue ? _self.currentValue : currentValue // ignore: cast_nullable_to_non_nullable
+as SensorUiConfig?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,currentValue: freezed == currentValue ? _self.currentValue : currentValue // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
 }
@@ -171,10 +174,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int sensorId,  int deviceId,  String name,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Sensor() when $default != null:
-return $default(_that.sensorId,_that.deviceId,_that.name,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.currentValue);case _:
+return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.slug,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.updatedAt,_that.currentValue);case _:
   return orElse();
 
 }
@@ -192,10 +195,10 @@ return $default(_that.sensorId,_that.deviceId,_that.name,_that.sensorDataType,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int sensorId,  int deviceId,  String name,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue)  $default,) {final _that = this;
 switch (_that) {
 case _Sensor():
-return $default(_that.sensorId,_that.deviceId,_that.name,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.currentValue);case _:
+return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.slug,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.updatedAt,_that.currentValue);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +215,10 @@ return $default(_that.sensorId,_that.deviceId,_that.name,_that.sensorDataType,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int sensorId,  int deviceId,  String name,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue)?  $default,) {final _that = this;
 switch (_that) {
 case _Sensor() when $default != null:
-return $default(_that.sensorId,_that.deviceId,_that.name,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.currentValue);case _:
+return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.slug,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.updatedAt,_that.currentValue);case _:
   return null;
 
 }
@@ -227,15 +230,18 @@ return $default(_that.sensorId,_that.deviceId,_that.name,_that.sensorDataType,_t
 @JsonSerializable()
 
 class _Sensor implements Sensor {
-  const _Sensor({required this.sensorId, required this.deviceId, required this.name, required this.sensorDataType, this.unit, this.uiConfigJson, @JsonKey(includeFromJson: false, includeToJson: false) this.currentValue});
+  const _Sensor({required this.sensorId, this.deviceId, this.portNumber, this.name, this.slug, required this.sensorDataType, this.unit, this.uiConfigJson, this.updatedAt, @JsonKey(includeFromJson: false, includeToJson: false) this.currentValue});
   factory _Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 
 @override final  int sensorId;
-@override final  int deviceId;
-@override final  String name;
+@override final  int? deviceId;
+@override final  int? portNumber;
+@override final  String? name;
+@override final  String? slug;
 @override final  int sensorDataType;
 @override final  String? unit;
 @override final  SensorUiConfig? uiConfigJson;
+@override final  DateTime? updatedAt;
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  double? currentValue;
 
 /// Create a copy of Sensor
@@ -251,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Sensor&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.name, name) || other.name == name)&&(identical(other.sensorDataType, sensorDataType) || other.sensorDataType == sensorDataType)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.uiConfigJson, uiConfigJson) || other.uiConfigJson == uiConfigJson)&&(identical(other.currentValue, currentValue) || other.currentValue == currentValue));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Sensor&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.deviceId, deviceId) || other.deviceId == deviceId)&&(identical(other.portNumber, portNumber) || other.portNumber == portNumber)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.sensorDataType, sensorDataType) || other.sensorDataType == sensorDataType)&&(identical(other.unit, unit) || other.unit == unit)&&(identical(other.uiConfigJson, uiConfigJson) || other.uiConfigJson == uiConfigJson)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt)&&(identical(other.currentValue, currentValue) || other.currentValue == currentValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,sensorId,deviceId,name,sensorDataType,unit,uiConfigJson,currentValue);
+int get hashCode => Object.hash(runtimeType,sensorId,deviceId,portNumber,name,slug,sensorDataType,unit,uiConfigJson,updatedAt,currentValue);
 
 @override
 String toString() {
-  return 'Sensor(sensorId: $sensorId, deviceId: $deviceId, name: $name, sensorDataType: $sensorDataType, unit: $unit, uiConfigJson: $uiConfigJson, currentValue: $currentValue)';
+  return 'Sensor(sensorId: $sensorId, deviceId: $deviceId, portNumber: $portNumber, name: $name, slug: $slug, sensorDataType: $sensorDataType, unit: $unit, uiConfigJson: $uiConfigJson, updatedAt: $updatedAt, currentValue: $currentValue)';
 }
 
 
@@ -271,7 +277,7 @@ abstract mixin class _$SensorCopyWith<$Res> implements $SensorCopyWith<$Res> {
   factory _$SensorCopyWith(_Sensor value, $Res Function(_Sensor) _then) = __$SensorCopyWithImpl;
 @override @useResult
 $Res call({
- int sensorId, int deviceId, String name, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson,@JsonKey(includeFromJson: false, includeToJson: false) double? currentValue
+ int sensorId, int? deviceId, int? portNumber, String? name, String? slug, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson, DateTime? updatedAt,@JsonKey(includeFromJson: false, includeToJson: false) double? currentValue
 });
 
 
@@ -288,15 +294,18 @@ class __$SensorCopyWithImpl<$Res>
 
 /// Create a copy of Sensor
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? sensorId = null,Object? deviceId = null,Object? name = null,Object? sensorDataType = null,Object? unit = freezed,Object? uiConfigJson = freezed,Object? currentValue = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? sensorId = null,Object? deviceId = freezed,Object? portNumber = freezed,Object? name = freezed,Object? slug = freezed,Object? sensorDataType = null,Object? unit = freezed,Object? uiConfigJson = freezed,Object? updatedAt = freezed,Object? currentValue = freezed,}) {
   return _then(_Sensor(
 sensorId: null == sensorId ? _self.sensorId : sensorId // ignore: cast_nullable_to_non_nullable
-as int,deviceId: null == deviceId ? _self.deviceId : deviceId // ignore: cast_nullable_to_non_nullable
-as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,sensorDataType: null == sensorDataType ? _self.sensorDataType : sensorDataType // ignore: cast_nullable_to_non_nullable
+as int,deviceId: freezed == deviceId ? _self.deviceId : deviceId // ignore: cast_nullable_to_non_nullable
+as int?,portNumber: freezed == portNumber ? _self.portNumber : portNumber // ignore: cast_nullable_to_non_nullable
+as int?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,slug: freezed == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+as String?,sensorDataType: null == sensorDataType ? _self.sensorDataType : sensorDataType // ignore: cast_nullable_to_non_nullable
 as int,unit: freezed == unit ? _self.unit : unit // ignore: cast_nullable_to_non_nullable
 as String?,uiConfigJson: freezed == uiConfigJson ? _self.uiConfigJson : uiConfigJson // ignore: cast_nullable_to_non_nullable
-as SensorUiConfig?,currentValue: freezed == currentValue ? _self.currentValue : currentValue // ignore: cast_nullable_to_non_nullable
+as SensorUiConfig?,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,currentValue: freezed == currentValue ? _self.currentValue : currentValue // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
 }

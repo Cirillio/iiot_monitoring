@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:logging/logging.dart';
 
 import 'src/core/storage/prefs_provider.dart';
 import 'src/core/theme/app_theme.dart';
@@ -9,6 +10,12 @@ import 'src/features/main/presentation/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Настройка логов
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    debugPrint('${record.level.name}: ${record.time}: ${record.message}');
+  });
 
   // Инициализация SharedPreferences до запуска runApp
   final prefs = await SharedPreferences.getInstance();

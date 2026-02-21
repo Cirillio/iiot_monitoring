@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Device {
 
- int get id; String get name; String get ipAddress; bool get isActive; List<Sensor> get sensors;
+ int get id; String? get name; String? get ipAddress; int? get port; int? get slaveId; bool get isActive; DateTime? get createdAt; List<Sensor> get sensors;
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DeviceCopyWith<Device> get copyWith => _$DeviceCopyWithImpl<Device>(this as Dev
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&const DeepCollectionEquality().equals(other.sensors, sensors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.slaveId, slaveId) || other.slaveId == slaveId)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.sensors, sensors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,ipAddress,isActive,const DeepCollectionEquality().hash(sensors));
+int get hashCode => Object.hash(runtimeType,id,name,ipAddress,port,slaveId,isActive,createdAt,const DeepCollectionEquality().hash(sensors));
 
 @override
 String toString() {
-  return 'Device(id: $id, name: $name, ipAddress: $ipAddress, isActive: $isActive, sensors: $sensors)';
+  return 'Device(id: $id, name: $name, ipAddress: $ipAddress, port: $port, slaveId: $slaveId, isActive: $isActive, createdAt: $createdAt, sensors: $sensors)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DeviceCopyWith<$Res>  {
   factory $DeviceCopyWith(Device value, $Res Function(Device) _then) = _$DeviceCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String ipAddress, bool isActive, List<Sensor> sensors
+ int id, String? name, String? ipAddress, int? port, int? slaveId, bool isActive, DateTime? createdAt, List<Sensor> sensors
 });
 
 
@@ -65,13 +65,16 @@ class _$DeviceCopyWithImpl<$Res>
 
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? ipAddress = null,Object? isActive = null,Object? sensors = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? ipAddress = freezed,Object? port = freezed,Object? slaveId = freezed,Object? isActive = null,Object? createdAt = freezed,Object? sensors = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,ipAddress: null == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
-as String,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,sensors: null == sensors ? _self.sensors : sensors // ignore: cast_nullable_to_non_nullable
+as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,ipAddress: freezed == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
+as String?,port: freezed == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int?,slaveId: freezed == slaveId ? _self.slaveId : slaveId // ignore: cast_nullable_to_non_nullable
+as int?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,sensors: null == sensors ? _self.sensors : sensors // ignore: cast_nullable_to_non_nullable
 as List<Sensor>,
   ));
 }
@@ -157,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String ipAddress,  bool isActive,  List<Sensor> sensors)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? name,  String? ipAddress,  int? port,  int? slaveId,  bool isActive,  DateTime? createdAt,  List<Sensor> sensors)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Device() when $default != null:
-return $default(_that.id,_that.name,_that.ipAddress,_that.isActive,_that.sensors);case _:
+return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_that.isActive,_that.createdAt,_that.sensors);case _:
   return orElse();
 
 }
@@ -178,10 +181,10 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.isActive,_that.sensors
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String ipAddress,  bool isActive,  List<Sensor> sensors)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? name,  String? ipAddress,  int? port,  int? slaveId,  bool isActive,  DateTime? createdAt,  List<Sensor> sensors)  $default,) {final _that = this;
 switch (_that) {
 case _Device():
-return $default(_that.id,_that.name,_that.ipAddress,_that.isActive,_that.sensors);case _:
+return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_that.isActive,_that.createdAt,_that.sensors);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +201,10 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.isActive,_that.sensors
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String ipAddress,  bool isActive,  List<Sensor> sensors)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? name,  String? ipAddress,  int? port,  int? slaveId,  bool isActive,  DateTime? createdAt,  List<Sensor> sensors)?  $default,) {final _that = this;
 switch (_that) {
 case _Device() when $default != null:
-return $default(_that.id,_that.name,_that.ipAddress,_that.isActive,_that.sensors);case _:
+return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_that.isActive,_that.createdAt,_that.sensors);case _:
   return null;
 
 }
@@ -213,13 +216,16 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.isActive,_that.sensors
 @JsonSerializable()
 
 class _Device implements Device {
-  const _Device({required this.id, required this.name, required this.ipAddress, required this.isActive, final  List<Sensor> sensors = const []}): _sensors = sensors;
+  const _Device({required this.id, this.name, this.ipAddress, this.port, this.slaveId, required this.isActive, this.createdAt, final  List<Sensor> sensors = const []}): _sensors = sensors;
   factory _Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 
 @override final  int id;
-@override final  String name;
-@override final  String ipAddress;
+@override final  String? name;
+@override final  String? ipAddress;
+@override final  int? port;
+@override final  int? slaveId;
 @override final  bool isActive;
+@override final  DateTime? createdAt;
  final  List<Sensor> _sensors;
 @override@JsonKey() List<Sensor> get sensors {
   if (_sensors is EqualUnmodifiableListView) return _sensors;
@@ -241,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&const DeepCollectionEquality().equals(other._sensors, _sensors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.slaveId, slaveId) || other.slaveId == slaveId)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._sensors, _sensors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,ipAddress,isActive,const DeepCollectionEquality().hash(_sensors));
+int get hashCode => Object.hash(runtimeType,id,name,ipAddress,port,slaveId,isActive,createdAt,const DeepCollectionEquality().hash(_sensors));
 
 @override
 String toString() {
-  return 'Device(id: $id, name: $name, ipAddress: $ipAddress, isActive: $isActive, sensors: $sensors)';
+  return 'Device(id: $id, name: $name, ipAddress: $ipAddress, port: $port, slaveId: $slaveId, isActive: $isActive, createdAt: $createdAt, sensors: $sensors)';
 }
 
 
@@ -261,7 +267,7 @@ abstract mixin class _$DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
   factory _$DeviceCopyWith(_Device value, $Res Function(_Device) _then) = __$DeviceCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String ipAddress, bool isActive, List<Sensor> sensors
+ int id, String? name, String? ipAddress, int? port, int? slaveId, bool isActive, DateTime? createdAt, List<Sensor> sensors
 });
 
 
@@ -278,13 +284,16 @@ class __$DeviceCopyWithImpl<$Res>
 
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? ipAddress = null,Object? isActive = null,Object? sensors = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? ipAddress = freezed,Object? port = freezed,Object? slaveId = freezed,Object? isActive = null,Object? createdAt = freezed,Object? sensors = null,}) {
   return _then(_Device(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,ipAddress: null == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
-as String,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,sensors: null == sensors ? _self._sensors : sensors // ignore: cast_nullable_to_non_nullable
+as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,ipAddress: freezed == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
+as String?,port: freezed == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int?,slaveId: freezed == slaveId ? _self.slaveId : slaveId // ignore: cast_nullable_to_non_nullable
+as int?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,sensors: null == sensors ? _self._sensors : sensors // ignore: cast_nullable_to_non_nullable
 as List<Sensor>,
   ));
 }

@@ -4,6 +4,7 @@ import 'package:exui/exui.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'controllers/dashboard_controller.dart';
 import 'widgets/device_card.dart';
+import 'widgets/dashboard_skeleton.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -26,7 +27,7 @@ class DashboardScreen extends ConsumerWidget {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 120), // Bottom padding for navbar
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 160),
             itemCount: devices.length,
             separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
@@ -37,17 +38,37 @@ class DashboardScreen extends ConsumerWidget {
             },
           );
         },
-        loading: () => const CircularProgressIndicator().center(),
-        error: (error, stack) => [
-          const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
-          const SizedBox(height: 16),
-          Text('Ошибка: $error', textAlign: TextAlign.center),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: () => ref.invalidate(dashboardControllerProvider),
-            child: const Text('Повторить'),
-          ),
-        ].column().center(),
+        loading: () => const DashboardSkeleton(),
+        error: (error, stack) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 64),
+          child: [
+            const Icon(
+              Icons.wifi_off_rounded,
+              color: Colors.redAccent,
+              size: 64,
+            ),
+            const SizedBox(height: 24),
+            Text(
+              error.toString(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => ref.invalidate(dashboardControllerProvider),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('Попробовать снова'),
+              ),
+            ),
+          ].column().center(),
+        ),
       ),
     );
   }

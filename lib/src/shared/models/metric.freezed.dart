@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Metric {
 
- int get sensorId; double get value; DateTime get time;
+@JsonKey(name: 'SensorId') int get sensorId;@JsonKey(name: 'Value') double get value;@JsonKey(name: 'Time') DateTime get time;@JsonKey(name: 'RawValue') double? get rawValue;
 /// Create a copy of Metric
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $MetricCopyWith<Metric> get copyWith => _$MetricCopyWithImpl<Metric>(this as Met
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Metric&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.value, value) || other.value == value)&&(identical(other.time, time) || other.time == time));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Metric&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.value, value) || other.value == value)&&(identical(other.time, time) || other.time == time)&&(identical(other.rawValue, rawValue) || other.rawValue == rawValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,sensorId,value,time);
+int get hashCode => Object.hash(runtimeType,sensorId,value,time,rawValue);
 
 @override
 String toString() {
-  return 'Metric(sensorId: $sensorId, value: $value, time: $time)';
+  return 'Metric(sensorId: $sensorId, value: $value, time: $time, rawValue: $rawValue)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $MetricCopyWith<$Res>  {
   factory $MetricCopyWith(Metric value, $Res Function(Metric) _then) = _$MetricCopyWithImpl;
 @useResult
 $Res call({
- int sensorId, double value, DateTime time
+@JsonKey(name: 'SensorId') int sensorId,@JsonKey(name: 'Value') double value,@JsonKey(name: 'Time') DateTime time,@JsonKey(name: 'RawValue') double? rawValue
 });
 
 
@@ -65,12 +65,13 @@ class _$MetricCopyWithImpl<$Res>
 
 /// Create a copy of Metric
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? sensorId = null,Object? value = null,Object? time = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? sensorId = null,Object? value = null,Object? time = null,Object? rawValue = freezed,}) {
   return _then(_self.copyWith(
 sensorId: null == sensorId ? _self.sensorId : sensorId // ignore: cast_nullable_to_non_nullable
 as int,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as double,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,rawValue: freezed == rawValue ? _self.rawValue : rawValue // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int sensorId,  double value,  DateTime time)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'SensorId')  int sensorId, @JsonKey(name: 'Value')  double value, @JsonKey(name: 'Time')  DateTime time, @JsonKey(name: 'RawValue')  double? rawValue)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Metric() when $default != null:
-return $default(_that.sensorId,_that.value,_that.time);case _:
+return $default(_that.sensorId,_that.value,_that.time,_that.rawValue);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.sensorId,_that.value,_that.time);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int sensorId,  double value,  DateTime time)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'SensorId')  int sensorId, @JsonKey(name: 'Value')  double value, @JsonKey(name: 'Time')  DateTime time, @JsonKey(name: 'RawValue')  double? rawValue)  $default,) {final _that = this;
 switch (_that) {
 case _Metric():
-return $default(_that.sensorId,_that.value,_that.time);case _:
+return $default(_that.sensorId,_that.value,_that.time,_that.rawValue);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.sensorId,_that.value,_that.time);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int sensorId,  double value,  DateTime time)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'SensorId')  int sensorId, @JsonKey(name: 'Value')  double value, @JsonKey(name: 'Time')  DateTime time, @JsonKey(name: 'RawValue')  double? rawValue)?  $default,) {final _that = this;
 switch (_that) {
 case _Metric() when $default != null:
-return $default(_that.sensorId,_that.value,_that.time);case _:
+return $default(_that.sensorId,_that.value,_that.time,_that.rawValue);case _:
   return null;
 
 }
@@ -211,12 +212,13 @@ return $default(_that.sensorId,_that.value,_that.time);case _:
 @JsonSerializable()
 
 class _Metric implements Metric {
-  const _Metric({required this.sensorId, required this.value, required this.time});
+  const _Metric({@JsonKey(name: 'SensorId') required this.sensorId, @JsonKey(name: 'Value') required this.value, @JsonKey(name: 'Time') required this.time, @JsonKey(name: 'RawValue') this.rawValue});
   factory _Metric.fromJson(Map<String, dynamic> json) => _$MetricFromJson(json);
 
-@override final  int sensorId;
-@override final  double value;
-@override final  DateTime time;
+@override@JsonKey(name: 'SensorId') final  int sensorId;
+@override@JsonKey(name: 'Value') final  double value;
+@override@JsonKey(name: 'Time') final  DateTime time;
+@override@JsonKey(name: 'RawValue') final  double? rawValue;
 
 /// Create a copy of Metric
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Metric&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.value, value) || other.value == value)&&(identical(other.time, time) || other.time == time));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Metric&&(identical(other.sensorId, sensorId) || other.sensorId == sensorId)&&(identical(other.value, value) || other.value == value)&&(identical(other.time, time) || other.time == time)&&(identical(other.rawValue, rawValue) || other.rawValue == rawValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,sensorId,value,time);
+int get hashCode => Object.hash(runtimeType,sensorId,value,time,rawValue);
 
 @override
 String toString() {
-  return 'Metric(sensorId: $sensorId, value: $value, time: $time)';
+  return 'Metric(sensorId: $sensorId, value: $value, time: $time, rawValue: $rawValue)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$MetricCopyWith<$Res> implements $MetricCopyWith<$Res> {
   factory _$MetricCopyWith(_Metric value, $Res Function(_Metric) _then) = __$MetricCopyWithImpl;
 @override @useResult
 $Res call({
- int sensorId, double value, DateTime time
+@JsonKey(name: 'SensorId') int sensorId,@JsonKey(name: 'Value') double value,@JsonKey(name: 'Time') DateTime time,@JsonKey(name: 'RawValue') double? rawValue
 });
 
 
@@ -268,12 +270,13 @@ class __$MetricCopyWithImpl<$Res>
 
 /// Create a copy of Metric
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? sensorId = null,Object? value = null,Object? time = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? sensorId = null,Object? value = null,Object? time = null,Object? rawValue = freezed,}) {
   return _then(_Metric(
 sensorId: null == sensorId ? _self.sensorId : sensorId // ignore: cast_nullable_to_non_nullable
 as int,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as double,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,rawValue: freezed == rawValue ? _self.rawValue : rawValue // ignore: cast_nullable_to_non_nullable
+as double?,
   ));
 }
 

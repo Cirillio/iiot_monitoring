@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:exui/exui.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../shared/models/sensor.dart';
+import 'package:material_symbols_icons/get.dart'; // ВАЖНО: именно /get.dart
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 enum SensorStatus { normal, critical, offline }
 
@@ -38,8 +40,8 @@ extension SensorStatusX on Sensor {
     final min = uiConfigJson?.minCritical;
     final max = uiConfigJson?.maxCritical;
 
-    if (max != null && currentValue! > max) return LucideIcons.arrowUp;
-    if (min != null && currentValue! < min) return LucideIcons.arrowDown;
+    if (max != null && currentValue! > max) return LucideIcons.chevronsUp;
+    if (min != null && currentValue! < min) return LucideIcons.chevronsDown;
 
     return LucideIcons.check;
   }
@@ -81,12 +83,18 @@ class SensorCard extends StatelessWidget {
       child: [
         // Top Row
         [
-          Icon(LucideIcons.activity, color: iconColor, size: 18),
-          const SizedBox(width: 8),
+          Icon(
+            SymbolsGet.get(
+              sensor.uiConfigJson?.icon ?? 'horizontal_rule',
+              SymbolStyle.rounded,
+            ),
+            color: iconColor,
+            size: 24,
+          ),
           Expanded(
             child: [
               Text(
-                sensor.name,
+                sensor.name ?? "Unknown sensor",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
@@ -103,17 +111,17 @@ class SensorCard extends StatelessWidget {
             ].column(crossAxisAlignment: CrossAxisAlignment.start),
           ),
           Text(
-            '#${sensor.sensorId}',
+            'Port: ${sensor.portNumber}',
             style: TextStyle(
               fontSize: 10,
               color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),
           ),
-        ].row(),
+        ].row(spacing: 6),
 
         // Trend Icon
         Expanded(
-          child: Icon(sensor.trendIcon, color: statusColor, size: 32).center(),
+          child: Icon(sensor.trendIcon, color: statusColor, size: 48).center(),
         ),
 
         // Bottom Value

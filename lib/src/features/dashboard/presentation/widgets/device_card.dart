@@ -17,9 +17,6 @@ class DeviceCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-        ),
       ),
       child: [
         // Header
@@ -36,22 +33,29 @@ class DeviceCard extends StatelessWidget {
           Expanded(
             child: [
               Text(
-                device.name,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                device.name ?? "Unknown device",
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
-                device.ipAddress,
-                style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
+                device.ipAddress ?? "undefined",
+                style: TextStyle(
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
               ),
             ].column(crossAxisAlignment: CrossAxisAlignment.start),
           ),
           Text(
             'ID: ${device.id}',
-            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
+            style: TextStyle(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+            ),
           ),
-        ].row(),
+        ].row().padding(EdgeInsets.symmetric(horizontal: 12, vertical: 6)),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
 
         // Sensors Grid
         GridView.builder(
@@ -59,32 +63,38 @@ class DeviceCard extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            mainAxisSpacing: 8,
-            crossAxisSpacing: 8,
-            childAspectRatio: 0.9,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1,
           ),
-          itemCount: device.sensors.length,
+          itemCount: device.sensors?.length ?? 0,
           itemBuilder: (context, index) {
-            return SensorCard(sensor: device.sensors[index]);
+            final sensor = device.sensors?[index];
+            if (sensor != null) {
+              return SensorCard(sensor: sensor);
+            }
+            return sizedBox();
           },
         ),
-
-        const SizedBox(height: 16),
 
         // Action Button
         SizedBox(
           width: double.infinity,
-          child: ElevatedButton(
+          child: TextButton(
             onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+            style: TextButton.styleFrom(
+              backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.5),
               foregroundColor: theme.colorScheme.onSurface,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              padding: EdgeInsets.symmetric(vertical: 12),
             ),
-            child: const Text('Перейти к устройству'),
+            child: const Text(
+              'Перейти к устройству',
+              style: TextStyle(fontSize: 18),
+            ),
           ),
         ),
       ].column(),

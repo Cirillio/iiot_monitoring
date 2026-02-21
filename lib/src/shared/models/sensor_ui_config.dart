@@ -8,7 +8,14 @@ abstract class SensorUiConfig with _$SensorUiConfig {
   const factory SensorUiConfig({
     String? color,
     String? icon,
+    int? mainPagePosition,
+    int? graphPosition,
+    int? tablePosition,
+    int? alarmPosition,
+    int? historyPosition,
     double? minCritical,
+    double? minWarning,
+    double? maxWarning,
     double? maxCritical,
   }) = _SensorUiConfig;
 

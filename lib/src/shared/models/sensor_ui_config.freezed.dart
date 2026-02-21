@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SensorUiConfig {
 
- String? get color; String? get icon; double? get minCritical; double? get maxCritical;
+ String? get color; String? get icon; int? get mainPagePosition; int? get graphPosition; int? get tablePosition; int? get alarmPosition; int? get historyPosition; double? get minCritical; double? get minWarning; double? get maxWarning; double? get maxCritical;
 /// Create a copy of SensorUiConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SensorUiConfigCopyWith<SensorUiConfig> get copyWith => _$SensorUiConfigCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SensorUiConfig&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.minCritical, minCritical) || other.minCritical == minCritical)&&(identical(other.maxCritical, maxCritical) || other.maxCritical == maxCritical));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SensorUiConfig&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.mainPagePosition, mainPagePosition) || other.mainPagePosition == mainPagePosition)&&(identical(other.graphPosition, graphPosition) || other.graphPosition == graphPosition)&&(identical(other.tablePosition, tablePosition) || other.tablePosition == tablePosition)&&(identical(other.alarmPosition, alarmPosition) || other.alarmPosition == alarmPosition)&&(identical(other.historyPosition, historyPosition) || other.historyPosition == historyPosition)&&(identical(other.minCritical, minCritical) || other.minCritical == minCritical)&&(identical(other.minWarning, minWarning) || other.minWarning == minWarning)&&(identical(other.maxWarning, maxWarning) || other.maxWarning == maxWarning)&&(identical(other.maxCritical, maxCritical) || other.maxCritical == maxCritical));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,color,icon,minCritical,maxCritical);
+int get hashCode => Object.hash(runtimeType,color,icon,mainPagePosition,graphPosition,tablePosition,alarmPosition,historyPosition,minCritical,minWarning,maxWarning,maxCritical);
 
 @override
 String toString() {
-  return 'SensorUiConfig(color: $color, icon: $icon, minCritical: $minCritical, maxCritical: $maxCritical)';
+  return 'SensorUiConfig(color: $color, icon: $icon, mainPagePosition: $mainPagePosition, graphPosition: $graphPosition, tablePosition: $tablePosition, alarmPosition: $alarmPosition, historyPosition: $historyPosition, minCritical: $minCritical, minWarning: $minWarning, maxWarning: $maxWarning, maxCritical: $maxCritical)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SensorUiConfigCopyWith<$Res>  {
   factory $SensorUiConfigCopyWith(SensorUiConfig value, $Res Function(SensorUiConfig) _then) = _$SensorUiConfigCopyWithImpl;
 @useResult
 $Res call({
- String? color, String? icon, double? minCritical, double? maxCritical
+ String? color, String? icon, int? mainPagePosition, int? graphPosition, int? tablePosition, int? alarmPosition, int? historyPosition, double? minCritical, double? minWarning, double? maxWarning, double? maxCritical
 });
 
 
@@ -65,11 +65,18 @@ class _$SensorUiConfigCopyWithImpl<$Res>
 
 /// Create a copy of SensorUiConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? color = freezed,Object? icon = freezed,Object? minCritical = freezed,Object? maxCritical = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? color = freezed,Object? icon = freezed,Object? mainPagePosition = freezed,Object? graphPosition = freezed,Object? tablePosition = freezed,Object? alarmPosition = freezed,Object? historyPosition = freezed,Object? minCritical = freezed,Object? minWarning = freezed,Object? maxWarning = freezed,Object? maxCritical = freezed,}) {
   return _then(_self.copyWith(
 color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String?,minCritical: freezed == minCritical ? _self.minCritical : minCritical // ignore: cast_nullable_to_non_nullable
+as String?,mainPagePosition: freezed == mainPagePosition ? _self.mainPagePosition : mainPagePosition // ignore: cast_nullable_to_non_nullable
+as int?,graphPosition: freezed == graphPosition ? _self.graphPosition : graphPosition // ignore: cast_nullable_to_non_nullable
+as int?,tablePosition: freezed == tablePosition ? _self.tablePosition : tablePosition // ignore: cast_nullable_to_non_nullable
+as int?,alarmPosition: freezed == alarmPosition ? _self.alarmPosition : alarmPosition // ignore: cast_nullable_to_non_nullable
+as int?,historyPosition: freezed == historyPosition ? _self.historyPosition : historyPosition // ignore: cast_nullable_to_non_nullable
+as int?,minCritical: freezed == minCritical ? _self.minCritical : minCritical // ignore: cast_nullable_to_non_nullable
+as double?,minWarning: freezed == minWarning ? _self.minWarning : minWarning // ignore: cast_nullable_to_non_nullable
+as double?,maxWarning: freezed == maxWarning ? _self.maxWarning : maxWarning // ignore: cast_nullable_to_non_nullable
 as double?,maxCritical: freezed == maxCritical ? _self.maxCritical : maxCritical // ignore: cast_nullable_to_non_nullable
 as double?,
   ));
@@ -156,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? color,  String? icon,  double? minCritical,  double? maxCritical)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? color,  String? icon,  int? mainPagePosition,  int? graphPosition,  int? tablePosition,  int? alarmPosition,  int? historyPosition,  double? minCritical,  double? minWarning,  double? maxWarning,  double? maxCritical)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SensorUiConfig() when $default != null:
-return $default(_that.color,_that.icon,_that.minCritical,_that.maxCritical);case _:
+return $default(_that.color,_that.icon,_that.mainPagePosition,_that.graphPosition,_that.tablePosition,_that.alarmPosition,_that.historyPosition,_that.minCritical,_that.minWarning,_that.maxWarning,_that.maxCritical);case _:
   return orElse();
 
 }
@@ -177,10 +184,10 @@ return $default(_that.color,_that.icon,_that.minCritical,_that.maxCritical);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? color,  String? icon,  double? minCritical,  double? maxCritical)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? color,  String? icon,  int? mainPagePosition,  int? graphPosition,  int? tablePosition,  int? alarmPosition,  int? historyPosition,  double? minCritical,  double? minWarning,  double? maxWarning,  double? maxCritical)  $default,) {final _that = this;
 switch (_that) {
 case _SensorUiConfig():
-return $default(_that.color,_that.icon,_that.minCritical,_that.maxCritical);case _:
+return $default(_that.color,_that.icon,_that.mainPagePosition,_that.graphPosition,_that.tablePosition,_that.alarmPosition,_that.historyPosition,_that.minCritical,_that.minWarning,_that.maxWarning,_that.maxCritical);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +204,10 @@ return $default(_that.color,_that.icon,_that.minCritical,_that.maxCritical);case
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? color,  String? icon,  double? minCritical,  double? maxCritical)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? color,  String? icon,  int? mainPagePosition,  int? graphPosition,  int? tablePosition,  int? alarmPosition,  int? historyPosition,  double? minCritical,  double? minWarning,  double? maxWarning,  double? maxCritical)?  $default,) {final _that = this;
 switch (_that) {
 case _SensorUiConfig() when $default != null:
-return $default(_that.color,_that.icon,_that.minCritical,_that.maxCritical);case _:
+return $default(_that.color,_that.icon,_that.mainPagePosition,_that.graphPosition,_that.tablePosition,_that.alarmPosition,_that.historyPosition,_that.minCritical,_that.minWarning,_that.maxWarning,_that.maxCritical);case _:
   return null;
 
 }
@@ -212,12 +219,19 @@ return $default(_that.color,_that.icon,_that.minCritical,_that.maxCritical);case
 @JsonSerializable()
 
 class _SensorUiConfig implements SensorUiConfig {
-  const _SensorUiConfig({this.color, this.icon, this.minCritical, this.maxCritical});
+  const _SensorUiConfig({this.color, this.icon, this.mainPagePosition, this.graphPosition, this.tablePosition, this.alarmPosition, this.historyPosition, this.minCritical, this.minWarning, this.maxWarning, this.maxCritical});
   factory _SensorUiConfig.fromJson(Map<String, dynamic> json) => _$SensorUiConfigFromJson(json);
 
 @override final  String? color;
 @override final  String? icon;
+@override final  int? mainPagePosition;
+@override final  int? graphPosition;
+@override final  int? tablePosition;
+@override final  int? alarmPosition;
+@override final  int? historyPosition;
 @override final  double? minCritical;
+@override final  double? minWarning;
+@override final  double? maxWarning;
 @override final  double? maxCritical;
 
 /// Create a copy of SensorUiConfig
@@ -233,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SensorUiConfig&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.minCritical, minCritical) || other.minCritical == minCritical)&&(identical(other.maxCritical, maxCritical) || other.maxCritical == maxCritical));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SensorUiConfig&&(identical(other.color, color) || other.color == color)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.mainPagePosition, mainPagePosition) || other.mainPagePosition == mainPagePosition)&&(identical(other.graphPosition, graphPosition) || other.graphPosition == graphPosition)&&(identical(other.tablePosition, tablePosition) || other.tablePosition == tablePosition)&&(identical(other.alarmPosition, alarmPosition) || other.alarmPosition == alarmPosition)&&(identical(other.historyPosition, historyPosition) || other.historyPosition == historyPosition)&&(identical(other.minCritical, minCritical) || other.minCritical == minCritical)&&(identical(other.minWarning, minWarning) || other.minWarning == minWarning)&&(identical(other.maxWarning, maxWarning) || other.maxWarning == maxWarning)&&(identical(other.maxCritical, maxCritical) || other.maxCritical == maxCritical));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,color,icon,minCritical,maxCritical);
+int get hashCode => Object.hash(runtimeType,color,icon,mainPagePosition,graphPosition,tablePosition,alarmPosition,historyPosition,minCritical,minWarning,maxWarning,maxCritical);
 
 @override
 String toString() {
-  return 'SensorUiConfig(color: $color, icon: $icon, minCritical: $minCritical, maxCritical: $maxCritical)';
+  return 'SensorUiConfig(color: $color, icon: $icon, mainPagePosition: $mainPagePosition, graphPosition: $graphPosition, tablePosition: $tablePosition, alarmPosition: $alarmPosition, historyPosition: $historyPosition, minCritical: $minCritical, minWarning: $minWarning, maxWarning: $maxWarning, maxCritical: $maxCritical)';
 }
 
 
@@ -253,7 +267,7 @@ abstract mixin class _$SensorUiConfigCopyWith<$Res> implements $SensorUiConfigCo
   factory _$SensorUiConfigCopyWith(_SensorUiConfig value, $Res Function(_SensorUiConfig) _then) = __$SensorUiConfigCopyWithImpl;
 @override @useResult
 $Res call({
- String? color, String? icon, double? minCritical, double? maxCritical
+ String? color, String? icon, int? mainPagePosition, int? graphPosition, int? tablePosition, int? alarmPosition, int? historyPosition, double? minCritical, double? minWarning, double? maxWarning, double? maxCritical
 });
 
 
@@ -270,11 +284,18 @@ class __$SensorUiConfigCopyWithImpl<$Res>
 
 /// Create a copy of SensorUiConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? color = freezed,Object? icon = freezed,Object? minCritical = freezed,Object? maxCritical = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? color = freezed,Object? icon = freezed,Object? mainPagePosition = freezed,Object? graphPosition = freezed,Object? tablePosition = freezed,Object? alarmPosition = freezed,Object? historyPosition = freezed,Object? minCritical = freezed,Object? minWarning = freezed,Object? maxWarning = freezed,Object? maxCritical = freezed,}) {
   return _then(_SensorUiConfig(
 color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as String?,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String?,minCritical: freezed == minCritical ? _self.minCritical : minCritical // ignore: cast_nullable_to_non_nullable
+as String?,mainPagePosition: freezed == mainPagePosition ? _self.mainPagePosition : mainPagePosition // ignore: cast_nullable_to_non_nullable
+as int?,graphPosition: freezed == graphPosition ? _self.graphPosition : graphPosition // ignore: cast_nullable_to_non_nullable
+as int?,tablePosition: freezed == tablePosition ? _self.tablePosition : tablePosition // ignore: cast_nullable_to_non_nullable
+as int?,alarmPosition: freezed == alarmPosition ? _self.alarmPosition : alarmPosition // ignore: cast_nullable_to_non_nullable
+as int?,historyPosition: freezed == historyPosition ? _self.historyPosition : historyPosition // ignore: cast_nullable_to_non_nullable
+as int?,minCritical: freezed == minCritical ? _self.minCritical : minCritical // ignore: cast_nullable_to_non_nullable
+as double?,minWarning: freezed == minWarning ? _self.minWarning : minWarning // ignore: cast_nullable_to_non_nullable
+as double?,maxWarning: freezed == maxWarning ? _self.maxWarning : maxWarning // ignore: cast_nullable_to_non_nullable
 as double?,maxCritical: freezed == maxCritical ? _self.maxCritical : maxCritical // ignore: cast_nullable_to_non_nullable
 as double?,
   ));

@@ -9,9 +9,12 @@ part 'device.g.dart';
 abstract class Device with _$Device {
   const factory Device({
     required int id,
-    required String name,
-    required String ipAddress,
+    String? name,
+    String? ipAddress,
+    int? port,
+    int? slaveId,
     required bool isActive,
+    DateTime? createdAt,
     @Default([]) List<Sensor> sensors,
   }) = _Device;
 

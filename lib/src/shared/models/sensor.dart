@@ -9,11 +9,14 @@ part 'sensor.g.dart';
 abstract class Sensor with _$Sensor {
   const factory Sensor({
     required int sensorId,
-    required int deviceId,
-    required String name,
+    int? deviceId,
+    int? portNumber,
+    String? name,
+    String? slug,
     required int sensorDataType,
     String? unit,
     SensorUiConfig? uiConfigJson,
+    DateTime? updatedAt,
     @JsonKey(includeFromJson: false, includeToJson: false) double? currentValue,
   }) = _Sensor;
 

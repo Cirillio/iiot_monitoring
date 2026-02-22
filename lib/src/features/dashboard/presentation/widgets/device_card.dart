@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:exui/exui.dart';
+import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import '../../../../shared/models/device.dart';
 import 'sensor_card.dart';
 
@@ -12,12 +13,7 @@ class DeviceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-      ),
+    return IiotCard(
       child: [
         // Header
         [
@@ -29,7 +25,7 @@ class DeviceCard extends StatelessWidget {
               color: device.isActive ? Colors.greenAccent : Colors.redAccent,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 24),
           Expanded(
             child: [
               Text(
@@ -55,26 +51,32 @@ class DeviceCard extends StatelessWidget {
           ),
         ].row().padding(EdgeInsets.symmetric(horizontal: 12, vertical: 6)),
 
-        const SizedBox(height: 12),
-
         // Sensors Grid
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            childAspectRatio: 1,
+        List.generate((device.sensors.length / 2).ceil(), (index) {
+          final first = device.sensors[index * 2];
+          final second = (index * 2 + 1 < device.sensors.length)
+              ? device.sensors[index * 2 + 1]
+              : null;
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: SensorCard(sensor: first)),
+              const SizedBox(width: 6),
+              Expanded(
+                child: second != null
+                    ? SensorCard(sensor: second)
+                    : const SizedBox(),
+              ),
+            ],
+          );
+        }).column(spacing: 6),
+
+        Text(
+          "Всего датчиков: ${device.totalSensors}",
+          style: TextStyle(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
           ),
-          itemCount: device.sensors?.length ?? 0,
-          itemBuilder: (context, index) {
-            final sensor = device.sensors?[index];
-            if (sensor != null) {
-              return SensorCard(sensor: sensor);
-            }
-            return sizedBox();
-          },
         ),
 
         // Action Button
@@ -87,7 +89,7 @@ class DeviceCard extends StatelessWidget {
               foregroundColor: theme.colorScheme.onSurface,
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(36),
               ),
               padding: EdgeInsets.symmetric(vertical: 12),
             ),
@@ -97,7 +99,7 @@ class DeviceCard extends StatelessWidget {
             ),
           ),
         ),
-      ].column(),
+      ].column(spacing: 16),
     );
   }
 }

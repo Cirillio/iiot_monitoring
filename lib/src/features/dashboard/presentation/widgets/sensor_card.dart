@@ -3,7 +3,6 @@ import 'package:exui/exui.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../shared/models/sensor.dart';
 import 'package:material_symbols_icons/get.dart'; // ВАЖНО: именно /get.dart
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 enum SensorStatus { normal, critical, offline }
 
@@ -68,9 +67,9 @@ class SensorCard extends StatelessWidget {
     final iconColor = _parseHexColor(sensor.uiConfigJson?.color);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(32),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -110,38 +109,51 @@ class SensorCard extends StatelessWidget {
               ),
             ].column(crossAxisAlignment: CrossAxisAlignment.start),
           ),
-          Text(
-            'Port: ${sensor.portNumber}',
-            style: TextStyle(
-              fontSize: 10,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-            ),
-          ),
         ].row(spacing: 6),
 
         // Trend Icon
-        Expanded(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
           child: Icon(sensor.trendIcon, color: statusColor, size: 48).center(),
-        ),
+        ).marginSymmetric(vertical: 6),
 
         // Bottom Value
         [
           Text(
             '${sensor.currentValue?.toStringAsFixed(1) ?? '--'} ${sensor.unit ?? ''}',
             style: TextStyle(
-              fontSize: 20,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  offset: const Offset(.5, .5),
+                  blurRadius: 2,
+                ),
+              ],
+              fontSize: 24,
               fontWeight: FontWeight.bold,
               color: statusColor,
             ),
+          ).center(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Обновлено: только что',
+                style: TextStyle(
+                  fontSize: 8,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
+              ),
+              Text(
+                'Port: ${sensor.portNumber}',
+                style: TextStyle(
+                  fontSize: 8,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Обновлено: только что',
-            style: TextStyle(
-              fontSize: 8,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
-            ),
-          ),
-        ].column(crossAxisAlignment: CrossAxisAlignment.start),
+        ].column(crossAxisAlignment: CrossAxisAlignment.start, spacing: 6),
       ].column(crossAxisAlignment: CrossAxisAlignment.start),
     );
   }

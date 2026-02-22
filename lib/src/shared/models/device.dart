@@ -16,6 +16,7 @@ abstract class Device with _$Device {
     required bool isActive,
     DateTime? createdAt,
     @Default([]) List<Sensor> sensors,
+    @Default(0) int totalSensors,
   }) = _Device;
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);

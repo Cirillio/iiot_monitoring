@@ -11,9 +11,13 @@ class DeviceRepository {
 
   DeviceRepository(this._dio);
 
-  Future<List<Device>> getDevices() async {
+  Future<List<Device>> getDevices([int? limit]) async {
     try {
-      final response = await _dio.get('/api/dashboard');
+      String path = '/api/devices';
+      if (limit != null) {
+        path += '?limit=$limit';
+      }
+      final response = await _dio.get(path);
       final List<dynamic> data = response.data;
       return data.map((json) => Device.fromJson(json)).toList();
     } on DioException catch (e) {

@@ -21,6 +21,7 @@ _Device _$DeviceFromJson(Map<String, dynamic> json) => _Device(
           ?.map((e) => Sensor.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
+  totalSensors: (json['totalSensors'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$DeviceToJson(_Device instance) => <String, dynamic>{
@@ -32,4 +33,5 @@ Map<String, dynamic> _$DeviceToJson(_Device instance) => <String, dynamic>{
   'isActive': instance.isActive,
   'createdAt': instance.createdAt?.toIso8601String(),
   'sensors': instance.sensors,
+  'totalSensors': instance.totalSensors,
 };

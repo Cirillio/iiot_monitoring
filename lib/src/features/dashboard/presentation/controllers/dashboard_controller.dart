@@ -20,7 +20,7 @@ class DashboardController extends _$DashboardController {
       // 1. Загружаем начальный список устройств с таймаутом
       final devices = await ref
           .read(deviceRepositoryProvider)
-          .getDevices()
+          .getDevices(2)
           .timeout(const Duration(seconds: 10));
 
       // 2. Запускаем SignalR

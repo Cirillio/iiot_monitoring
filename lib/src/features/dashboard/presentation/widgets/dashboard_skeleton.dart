@@ -7,11 +7,15 @@ class DashboardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 160),
-      itemCount: 2,
-      separatorBuilder: (_, _) => const SizedBox(height: 16),
-      itemBuilder: (context, index) => const DeviceCardSkeleton(),
+      child: Column(
+        children: [
+          const DeviceCardSkeleton(),
+          const SizedBox(height: 16),
+          const DeviceCardSkeleton(),
+        ],
+      ),
     );
   }
 }

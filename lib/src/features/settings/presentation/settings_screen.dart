@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 import '../../../core/theme/theme_provider.dart';
@@ -29,22 +30,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         backgroundColor: theme.colorScheme.surface,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(48),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(24),
-              ),
+            IiotCard(
+              usePadding: false,
               child: Column(
                 children: [
                   ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 2,
-                    ),
                     title: const Text(
                       "Темная тема",
                       style: TextStyle(fontWeight: FontWeight.w500),
@@ -68,6 +62,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         top: Radius.circular(32),
                       ),
                     ),
+
                     onTap: () async {
                       await ref.read(themeModeProvider.notifier).toggleTheme();
                     },
@@ -83,10 +78,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ),
                   ),
                   ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 2,
-                    ),
                     title: const Text(
                       "Уведомления",
                       style: TextStyle(fontWeight: FontWeight.w500),

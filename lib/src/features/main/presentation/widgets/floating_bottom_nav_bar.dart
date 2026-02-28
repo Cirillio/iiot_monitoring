@@ -20,7 +20,7 @@ class FloatingBottomNavBar extends StatelessWidget {
     return Positioned(
       left: 0,
       right: 0,
-      bottom: 48,
+      bottom: 96,
       child: Center(
         child: Container(
           decoration: BoxDecoration(

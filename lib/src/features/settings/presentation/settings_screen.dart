@@ -1,3 +1,4 @@
+import 'package:exui/exui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
@@ -33,7 +34,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 6,
           children: [
+            SettingsBlockTitle(title: "General"),
             IiotCard(
               usePadding: false,
               child: Column(
@@ -112,9 +115,28 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 ],
               ),
             ),
+            SettingsBlockTitle(title: "Dashboard"),
           ],
         ),
       ),
     );
+  }
+}
+
+class SettingsBlockTitle extends ConsumerWidget {
+  const SettingsBlockTitle({super.key, this.title = "untitled"});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Text(
+      title,
+      style: TextStyle(
+        fontSize: 20,
+        color: Theme.of(context).colorScheme.inverseSurface.withAlpha(230),
+        fontWeight: FontWeight(600),
+      ),
+    ).center();
   }
 }

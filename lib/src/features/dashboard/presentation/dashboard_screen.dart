@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:exui/exui.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'controllers/dashboard_controller.dart';
 import 'widgets/device_card.dart';
 import 'widgets/dashboard_skeleton.dart';
@@ -23,7 +24,7 @@ class DashboardScreen extends ConsumerWidget {
         slivers: [
           // Единственный источник истины для отступов страницы (32 верт, 16 гориз)
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(6, 64, 6, 172),
+            padding: const EdgeInsets.fromLTRB(6, 64, 6, 224),
             sliver: SliverList.separated(
               // Индекс 0 — RealtimeClockCard
               // Индекс 1 — StatusCard
@@ -65,16 +66,43 @@ class DashboardScreen extends ConsumerWidget {
                         .fade(duration: 300.ms, delay: (deviceIndex * 50).ms)
                         .slideY(begin: 0.1, curve: Curves.easeOut);
                   },
-                  loading: () => const Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: DashboardSkeleton(),
-                  ),
-                  error: (error, _) => Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: _ErrorView(
-                      error: error,
-                      onRetry: () =>
-                          ref.invalidate(dashboardControllerProvider),
+                  loading: () => DashboardSkeleton(),
+                  error: (error, _) => Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(36)),
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
+                    child: Column(
+                      spacing: 24,
+                      children: [
+                        Icon(
+                          LucideIcons.wifiOff,
+                          color: Colors.redAccent,
+                          size: 64,
+                        ),
+                        Text(
+                          "Не удалось загрузить данные. Попробуйте заново.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () =>
+                              ref.invalidate(dashboardControllerProvider),
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                              Colors.redAccent,
+                            ),
+                          ),
+                          child: Text(
+                            "Повторить",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -110,6 +138,11 @@ class _StatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color primaryBg = Theme.of(
+      context,
+    ).colorScheme.primary.withValues(alpha: 0.05);
+    Color errorBg = Theme.of(context).colorScheme.error.withValues(alpha: 0.05);
+
     return IiotCard(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,29 +151,43 @@ class _StatusCard extends StatelessWidget {
             spacing: 12,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 12,
-                  vertical: 4,
+                  vertical: isLoading | (devicesCount == 0) ? 12 : 4,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withValues(alpha: 0.05),
+                  color: devicesCount == 0
+                      ? isLoading
+                            ? primaryBg
+                            : errorBg
+                      : primaryBg,
                   borderRadius: BorderRadius.all(Radius.circular(32)),
                 ),
-                child: Text(
-                  devicesCount.toString(),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 24,
-                    letterSpacing: 0.2,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+                child: isLoading
+                    ? Icon(
+                        LucideIcons.loader,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      )
+                    : devicesCount == 0
+                    ? Icon(
+                        LucideIcons.x,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.error,
+                      )
+                    : Text(
+                        devicesCount.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 24,
+                          letterSpacing: 0.2,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
               ),
 
               Text(
-                'Устройств',
+                isLoading ? 'Загрузка...' : 'Устройств',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22,
@@ -153,52 +200,12 @@ class _StatusCard extends StatelessWidget {
             ],
           ),
           IconButton(
-            onPressed: onRefresh,
+            onPressed: isLoading ? null : onRefresh,
             style: IconButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.surfaceDim,
               padding: const EdgeInsets.all(8),
             ),
             icon: const Icon(Icons.refresh_rounded, size: 24),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ErrorView extends StatelessWidget {
-  const _ErrorView({required this.error, required this.onRetry});
-
-  final Object error;
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 64),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.wifi_off_rounded, color: Colors.redAccent, size: 64),
-          const SizedBox(height: 24),
-          Text(
-            error.toString(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 32),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: onRetry,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text('Попробовать снова'),
-            ),
           ),
         ],
       ),

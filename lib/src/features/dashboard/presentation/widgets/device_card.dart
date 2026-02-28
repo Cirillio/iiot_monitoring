@@ -52,25 +52,26 @@ class DeviceCard extends StatelessWidget {
         ].row().padding(EdgeInsets.symmetric(horizontal: 12, vertical: 6)),
 
         // Sensors Grid
-        List.generate((device.sensors.length / 2).ceil(), (index) {
-          final first = device.sensors[index * 2];
-          final second = (index * 2 + 1 < device.sensors.length)
-              ? device.sensors[index * 2 + 1]
-              : null;
+        if (device.sensors.isNotEmpty)
+          List.generate((device.sensors.length / 2).ceil(), (index) {
+            final first = device.sensors[index * 2];
+            final second = (index * 2 + 1 < device.sensors.length)
+                ? device.sensors[index * 2 + 1]
+                : null;
 
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: SensorCard(sensor: first)),
-              const SizedBox(width: 6),
-              Expanded(
-                child: second != null
-                    ? SensorCard(sensor: second)
-                    : const SizedBox(),
-              ),
-            ],
-          );
-        }).column(spacing: 6),
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: SensorCard(sensor: first)),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: second != null
+                      ? SensorCard(sensor: second)
+                      : const SizedBox(),
+                ),
+              ],
+            );
+          }).column(spacing: 6),
 
         Text(
           "Всего датчиков: ${device.totalSensors}",

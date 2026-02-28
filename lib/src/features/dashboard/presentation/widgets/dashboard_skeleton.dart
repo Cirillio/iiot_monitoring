@@ -8,11 +8,11 @@ class DashboardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 160),
+      padding: const EdgeInsets.fromLTRB(6, 0, 6, 0),
       child: Column(
         children: [
           const DeviceCardSkeleton(),
-          const SizedBox(height: 16),
+          const SizedBox(height: 6),
           const DeviceCardSkeleton(),
         ],
       ),
@@ -33,12 +33,9 @@ class DeviceCardSkeleton extends StatelessWidget {
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
-            ),
           ),
           child: [
-            // Header Skeleton
+            // Header Skeleton (status dot, name, IP, ID)
             [
               Container(
                 width: 12,
@@ -52,17 +49,17 @@ class DeviceCardSkeleton extends StatelessWidget {
               Expanded(
                 child: [
                   Container(
-                    width: 120,
+                    width: 140,
                     height: 18,
                     decoration: BoxDecoration(
                       color: baseColor,
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Container(
-                    width: 80,
-                    height: 12,
+                    width: 100,
+                    height: 14,
                     decoration: BoxDecoration(
                       color: baseColor,
                       borderRadius: BorderRadius.circular(4),
@@ -71,7 +68,7 @@ class DeviceCardSkeleton extends StatelessWidget {
                 ].column(crossAxisAlignment: CrossAxisAlignment.start),
               ),
               Container(
-                width: 40,
+                width: 50,
                 height: 12,
                 decoration: BoxDecoration(
                   color: baseColor,
@@ -82,29 +79,43 @@ class DeviceCardSkeleton extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Grid Skeleton
-            GridView.builder(
+            // Sensors Grid Skeleton (2x2)
+            GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                childAspectRatio: 0.9,
+              crossAxisCount: 2,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
+              childAspectRatio: 0.85,
+              children: const [
+                SensorCardSkeleton(),
+                SensorCardSkeleton(),
+                SensorCardSkeleton(),
+                SensorCardSkeleton(),
+              ],
+            ),
+
+            const SizedBox(height: 12),
+
+            // Total sensors text skeleton
+            Container(
+              width: 120,
+              height: 12,
+              decoration: BoxDecoration(
+                color: baseColor,
+                borderRadius: BorderRadius.circular(4),
               ),
-              itemCount: 4,
-              itemBuilder: (context, index) => const SensorCardSkeleton(),
             ),
 
             const SizedBox(height: 16),
 
-            // Button Skeleton
+            // Action Button Skeleton
             Container(
               width: double.infinity,
-              height: 40,
+              height: 44,
               decoration: BoxDecoration(
                 color: baseColor,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(36),
               ),
             ),
           ].column(),
@@ -126,54 +137,88 @@ class SensorCardSkeleton extends StatelessWidget {
     final baseColor = theme.colorScheme.onSurface.withValues(alpha: 0.05);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(32),
       ),
       child: [
+        // Top Row: Icon + Name + Type
         [
           Container(
-            width: 18,
-            height: 18,
-            decoration: BoxDecoration(color: baseColor, shape: BoxShape.circle),
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: BorderRadius.circular(4),
+            ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Expanded(
-            child: Container(
+            child: [
+              Container(
+                width: 70,
+                height: 13,
+                decoration: BoxDecoration(
+                  color: baseColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Container(
+                width: 50,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: baseColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ].column(crossAxisAlignment: CrossAxisAlignment.start),
+          ),
+        ].row(),
+
+        // Trend Icon placeholder
+        const Spacer(),
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: baseColor,
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ).center(),
+        const Spacer(),
+
+        // Value and metadata
+        [
+          Container(
+            width: 80,
+            height: 24,
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ).center(),
+          const SizedBox(height: 6),
+          [
+            Container(
               width: 60,
-              height: 12,
+              height: 8,
               decoration: BoxDecoration(
                 color: baseColor,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-          ),
-        ].row(),
-        const Spacer(),
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(color: baseColor, shape: BoxShape.circle),
-        ).center(),
-        const Spacer(),
-        Container(
-          width: 70,
-          height: 20,
-          decoration: BoxDecoration(
-            color: baseColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          width: 40,
-          height: 8,
-          decoration: BoxDecoration(
-            color: baseColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-        ),
+            Container(
+              width: 40,
+              height: 8,
+              decoration: BoxDecoration(
+                color: baseColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ].row(mainAxisAlignment: MainAxisAlignment.spaceBetween),
+        ].column(crossAxisAlignment: CrossAxisAlignment.start),
       ].column(crossAxisAlignment: CrossAxisAlignment.start),
     );
   }

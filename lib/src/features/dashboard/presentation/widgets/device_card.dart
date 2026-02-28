@@ -3,6 +3,7 @@ import 'package:exui/exui.dart';
 import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import '../../../../shared/models/device.dart';
 import 'sensor_card.dart';
+import '../../../device_detail/presentation/device_detail_screen.dart';
 
 class DeviceCard extends StatelessWidget {
   final Device device;
@@ -63,7 +64,7 @@ class DeviceCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: SensorCard(sensor: first)),
-                const SizedBox(width: 6),
+                const SizedBox(width: 16),
                 Expanded(
                   child: second != null
                       ? SensorCard(sensor: second)
@@ -71,7 +72,7 @@ class DeviceCard extends StatelessWidget {
                 ),
               ],
             );
-          }).column(spacing: 6),
+          }).column(spacing: 16),
 
         Text(
           "Всего датчиков: ${device.totalSensors}",
@@ -84,13 +85,19 @@ class DeviceCard extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DeviceDetailScreen(deviceId: device.id),
+                ),
+              );
+            },
             style: TextButton.styleFrom(
               backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.5),
               foregroundColor: theme.colorScheme.onSurface,
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(36),
+                borderRadius: BorderRadius.circular(12),
               ),
               padding: EdgeInsets.symmetric(vertical: 12),
             ),

@@ -26,7 +26,15 @@ class IiotCard extends StatelessWidget {
       padding: usePadding ? padding : EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(36.0),
+        borderRadius: BorderRadius.circular(20.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(15),
+            offset: Offset(0, 4),
+            spreadRadius: 0.125,
+            blurRadius: 8,
+          ),
+        ],
         // Любые будущие изменения теней, обводок или эффектов наведения
         // должны делаться ТОЛЬКО здесь.
       ),

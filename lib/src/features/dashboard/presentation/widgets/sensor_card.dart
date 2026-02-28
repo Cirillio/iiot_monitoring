@@ -105,9 +105,9 @@ class _SensorCardState extends State<SensorCard> {
           opacity: isPressed ? 0.6 : 1.0,
           child: Container(
             // Removed extra closing parenthesis here
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32),
+              borderRadius: BorderRadius.circular(12),
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

@@ -14,9 +14,9 @@ class DashboardController extends _$DashboardController {
   StreamSubscription<Metric>? _metricsSubscription;
   final _logger = Logger("DashboardController");
 
-  static const int MAX_SENSOR_LIST_LENGTH = 6;
+  static const int _maxSensorListLength = 6;
 
-  final int sensor_list_length = 4;
+  final int _sensorListLength = 4;
 
   @override
   Future<List<Device>> build() async {
@@ -24,7 +24,7 @@ class DashboardController extends _$DashboardController {
       // 1. Загружаем начальный список устройств с таймаутом
       final devices = await ref
           .read(deviceRepositoryProvider)
-          .getDevices(2)
+          .getDevices(6)
           .timeout(const Duration(seconds: 10));
 
       // 2. Запускаем SignalR

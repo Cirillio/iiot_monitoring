@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:exui/exui.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -24,13 +23,13 @@ class DashboardScreen extends ConsumerWidget {
         slivers: [
           // Единственный источник истины для отступов страницы (32 верт, 16 гориз)
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(6, 64, 6, 224),
+            padding: const EdgeInsets.fromLTRB(16, 64, 16, 120),
             sliver: SliverList.separated(
               // Индекс 0 — RealtimeClockCard
               // Индекс 1 — StatusCard
               // Остальное: либо элементы, либо 1 заглушка (лоадер/ошибка/пусто).
               itemCount: _calculateItemCount(dashboardState, devices.length),
-              separatorBuilder: (context, index) => const SizedBox(height: 6),
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 // 1. Realtime Clock (Index 0)
                 if (index == 0) {

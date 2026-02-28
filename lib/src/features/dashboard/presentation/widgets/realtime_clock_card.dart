@@ -2,7 +2,6 @@ import 'package:exui/exui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 
 /// Провайдер, обновляющий время каждую секунду
 final _clockProvider = StreamProvider.autoDispose<DateTime>((ref) {

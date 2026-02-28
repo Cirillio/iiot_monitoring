@@ -18,6 +18,8 @@ abstract class Sensor with _$Sensor {
     SensorUiConfig? uiConfigJson,
     DateTime? updatedAt,
     @JsonKey(includeFromJson: false, includeToJson: false) double? currentValue,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    DateTime? lastSensorUpdated,
   }) = _Sensor;
 
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);

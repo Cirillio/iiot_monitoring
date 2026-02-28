@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:logging/logging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/core/storage/prefs_provider.dart';
 import 'src/core/theme/app_theme.dart';
@@ -10,6 +11,8 @@ import 'src/features/main/presentation/main_layout.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await initializeDateFormatting('ru', null);
 
   // Настройка логов
   Logger.root.level = Level.ALL;

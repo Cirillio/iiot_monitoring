@@ -6,6 +6,7 @@ import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import 'controllers/dashboard_controller.dart';
 import 'widgets/device_card.dart';
 import 'widgets/dashboard_skeleton.dart';
+import 'widgets/realtime_clock_card.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -22,15 +23,21 @@ class DashboardScreen extends ConsumerWidget {
         slivers: [
           // Единственный источник истины для отступов страницы (32 верт, 16 гориз)
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 64, 16, 172),
+            padding: const EdgeInsets.fromLTRB(6, 64, 6, 172),
             sliver: SliverList.separated(
-              // Индекс 0 — это всегда StatusCard.
+              // Индекс 0 — RealtimeClockCard
+              // Индекс 1 — StatusCard
               // Остальное: либо элементы, либо 1 заглушка (лоадер/ошибка/пусто).
               itemCount: _calculateItemCount(dashboardState, devices.length),
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              separatorBuilder: (context, index) => const SizedBox(height: 6),
               itemBuilder: (context, index) {
-                // 1. Фиксированный Header (Status Card)
+                // 1. Realtime Clock (Index 0)
                 if (index == 0) {
+                  return const RealtimeClockCard();
+                }
+
+                // 2. Status Card (Index 1)
+                if (index == 1) {
                   return _StatusCard(
                     onRefresh: () =>
                         ref.invalidate(dashboardControllerProvider),
@@ -39,7 +46,7 @@ class DashboardScreen extends ConsumerWidget {
                   );
                 }
 
-                // 2. Обработка состояний (Индекс > 0)
+                // 3. Обработка состояний (Индекс > 1)
                 return dashboardState.when(
                   data: (_) {
                     if (devices.isEmpty) {
@@ -49,8 +56,8 @@ class DashboardScreen extends ConsumerWidget {
                       );
                     }
 
-                    // Сдвигаем индекс, т.к. 0-й элемент занят StatusCard
-                    final deviceIndex = index - 1;
+                    // Сдвигаем индекс, т.к. 0 и 1 заняты
+                    final deviceIndex = index - 2;
                     final device = devices[deviceIndex];
 
                     return DeviceCard(device: device)
@@ -81,12 +88,12 @@ class DashboardScreen extends ConsumerWidget {
 
   /// Высчитывает правильное количество элементов для списка
   int _calculateItemCount(AsyncValue state, int devicesCount) {
-    // Если грузимся, ошибка или список пуст — показываем StatusCard (1) + Заглушка (1) = 2
+    // Если грузимся, ошибка или список пуст — показываем Clock (1) + Status (1) + Заглушка (1) = 3
     if (state.isLoading || state.hasError || devicesCount == 0) {
-      return 2;
+      return 3;
     }
-    // Иначе: StatusCard (1) + Количество устройств
-    return devicesCount + 1;
+    // Иначе: Clock (1) + Status (1) + Количество устройств
+    return devicesCount + 2;
   }
 }
 

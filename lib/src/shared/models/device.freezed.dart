@@ -234,7 +234,7 @@ class _Device implements Device {
   return EqualUnmodifiableListView(_sensors);
 }
 
-@override @JsonKey() final int totalSensors;
+@override@JsonKey() final  int totalSensors;
 
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.

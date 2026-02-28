@@ -20,7 +20,7 @@ class DashboardController extends _$DashboardController {
       // 1. Загружаем начальный список устройств с таймаутом
       final devices = await ref
           .read(deviceRepositoryProvider)
-          .getDevices(2)
+          .getDevices(4)
           .timeout(const Duration(seconds: 10));
 
       // 2. Запускаем SignalR
@@ -68,7 +68,10 @@ class DashboardController extends _$DashboardController {
 
         final updatedSensors = device.sensors.map((sensor) {
           if (sensor.sensorId == metric.sensorId) {
-            return sensor.copyWith(currentValue: metric.value);
+            return sensor.copyWith(
+              currentValue: metric.value,
+              lastSensorUpdated: metric.time,
+            );
           }
           return sensor;
         }).toList();

@@ -8,24 +8,16 @@ part of 'device_detail_controller.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Riverpod провайдер для получения данных об устройстве по его ID.
-///
-/// Подписывается на главный список устройств из [dashboardControllerProvider]
-/// и автоматически обновляется при изменении данных (в том числе через SignalR).
 
 @ProviderFor(DeviceDetailController)
 final deviceDetailControllerProvider = DeviceDetailControllerFamily._();
 
-/// Riverpod провайдер для получения данных об устройстве по его ID.
-///
-/// Подписывается на главный список устройств из [dashboardControllerProvider]
-/// и автоматически обновляется при изменении данных (в том числе через SignalR).
 final class DeviceDetailControllerProvider
-    extends $AsyncNotifierProvider<DeviceDetailController, Device> {
-  /// Riverpod провайдер для получения данных об устройстве по его ID.
-  ///
-  /// Подписывается на главный список устройств из [dashboardControllerProvider]
-  /// и автоматически обновляется при изменении данных (в том числе через SignalR).
+    extends
+        $NotifierProvider<
+          DeviceDetailController,
+          AsyncValue<CalculatedDevice?>
+        > {
   DeviceDetailControllerProvider._({
     required DeviceDetailControllerFamily super.from,
     required int super.argument,
@@ -51,6 +43,16 @@ final class DeviceDetailControllerProvider
   @override
   DeviceDetailController create() => DeviceDetailController();
 
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<CalculatedDevice?> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<CalculatedDevice?>>(
+        value,
+      ),
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     return other is DeviceDetailControllerProvider &&
@@ -64,20 +66,15 @@ final class DeviceDetailControllerProvider
 }
 
 String _$deviceDetailControllerHash() =>
-    r'5d7c813a9914f5b9ec6b09f1e2d449b206a17015';
-
-/// Riverpod провайдер для получения данных об устройстве по его ID.
-///
-/// Подписывается на главный список устройств из [dashboardControllerProvider]
-/// и автоматически обновляется при изменении данных (в том числе через SignalR).
+    r'4855346a361072da485fdda87e1c319f2ce146a6';
 
 final class DeviceDetailControllerFamily extends $Family
     with
         $ClassFamilyOverride<
           DeviceDetailController,
-          AsyncValue<Device>,
-          Device,
-          FutureOr<Device>,
+          AsyncValue<CalculatedDevice?>,
+          AsyncValue<CalculatedDevice?>,
+          AsyncValue<CalculatedDevice?>,
           int
         > {
   DeviceDetailControllerFamily._()
@@ -89,11 +86,6 @@ final class DeviceDetailControllerFamily extends $Family
         isAutoDispose: true,
       );
 
-  /// Riverpod провайдер для получения данных об устройстве по его ID.
-  ///
-  /// Подписывается на главный список устройств из [dashboardControllerProvider]
-  /// и автоматически обновляется при изменении данных (в том числе через SignalR).
-
   DeviceDetailControllerProvider call(int deviceId) =>
       DeviceDetailControllerProvider._(argument: deviceId, from: this);
 
@@ -101,25 +93,29 @@ final class DeviceDetailControllerFamily extends $Family
   String toString() => r'deviceDetailControllerProvider';
 }
 
-/// Riverpod провайдер для получения данных об устройстве по его ID.
-///
-/// Подписывается на главный список устройств из [dashboardControllerProvider]
-/// и автоматически обновляется при изменении данных (в том числе через SignalR).
-
-abstract class _$DeviceDetailController extends $AsyncNotifier<Device> {
+abstract class _$DeviceDetailController
+    extends $Notifier<AsyncValue<CalculatedDevice?>> {
   late final _$args = ref.$arg as int;
   int get deviceId => _$args;
 
-  FutureOr<Device> build(int deviceId);
+  AsyncValue<CalculatedDevice?> build(int deviceId);
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<Device>, Device>;
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<CalculatedDevice?>,
+              AsyncValue<CalculatedDevice?>
+            >;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<Device>, Device>,
-              AsyncValue<Device>,
+              AnyNotifier<
+                AsyncValue<CalculatedDevice?>,
+                AsyncValue<CalculatedDevice?>
+              >,
+              AsyncValue<CalculatedDevice?>,
               Object?,
               Object?
             >;

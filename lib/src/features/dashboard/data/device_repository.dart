@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/network/api_client.dart';
-import '../../../shared/models/device.dart';
+import '../../../shared/models/dto/device_dto.dart';
 
 part 'device_repository.g.dart';
 
@@ -11,17 +11,13 @@ class DeviceRepository {
 
   DeviceRepository(this._dio);
 
-  Future<List<Device>> getDevices([int? limit]) async {
+  Future<List<DeviceDto>> getDevices() async {
     try {
-      String path = '/api/devices';
-      if (limit != null) {
-        path += '?limit=$limit';
-      }
+      const path = '/api/devices';
       final response = await _dio.get(path);
       final List<dynamic> data = response.data;
-      return data.map((json) => Device.fromJson(json)).toList();
+      return data.map((json) => DeviceDto.fromJson(json)).toList();
     } on DioException catch (e) {
-      // Здесь можно добавить более детальную обработку ошибок (Logging, Custom Exceptions)
       throw Exception('Failed to load devices: ${e.message}');
     }
   }

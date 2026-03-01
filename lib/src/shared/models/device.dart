@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'sensor.dart';
+import 'package:iiot_monitoring/src/shared/models/sensor.dart';
 
 part 'device.freezed.dart';
 part 'device.g.dart';
@@ -21,3 +20,5 @@ abstract class Device with _$Device {
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 }
+
+// Force update 1

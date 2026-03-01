@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Sensor {
 
- int get sensorId; int? get deviceId; int? get portNumber; String? get name; String? get slug; int get sensorDataType; String? get unit; SensorUiConfig? get uiConfigJson; DateTime? get updatedAt;@JsonKey(includeFromJson: false, includeToJson: false) double? get currentValue;@JsonKey(includeFromJson: false, includeToJson: false) DateTime? get lastSensorUpdated;
+ int get sensorId; int? get deviceId; int? get portNumber; String? get name; String? get slug; int get sensorDataType; String? get unit; SensorUiConfig? get uiConfigJson; DateTime? get updatedAt; double? get currentValue; DateTime? get lastSensorUpdated;
 /// Create a copy of Sensor
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $SensorCopyWith<$Res>  {
   factory $SensorCopyWith(Sensor value, $Res Function(Sensor) _then) = _$SensorCopyWithImpl;
 @useResult
 $Res call({
- int sensorId, int? deviceId, int? portNumber, String? name, String? slug, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson, DateTime? updatedAt,@JsonKey(includeFromJson: false, includeToJson: false) double? currentValue,@JsonKey(includeFromJson: false, includeToJson: false) DateTime? lastSensorUpdated
+ int sensorId, int? deviceId, int? portNumber, String? name, String? slug, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson, DateTime? updatedAt, double? currentValue, DateTime? lastSensorUpdated
 });
 
 
@@ -175,7 +175,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue, @JsonKey(includeFromJson: false, includeToJson: false)  DateTime? lastSensorUpdated)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt,  double? currentValue,  DateTime? lastSensorUpdated)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Sensor() when $default != null:
 return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.slug,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.updatedAt,_that.currentValue,_that.lastSensorUpdated);case _:
@@ -196,7 +196,7 @@ return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue, @JsonKey(includeFromJson: false, includeToJson: false)  DateTime? lastSensorUpdated)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt,  double? currentValue,  DateTime? lastSensorUpdated)  $default,) {final _that = this;
 switch (_that) {
 case _Sensor():
 return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.slug,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.updatedAt,_that.currentValue,_that.lastSensorUpdated);case _:
@@ -216,7 +216,7 @@ return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt, @JsonKey(includeFromJson: false, includeToJson: false)  double? currentValue, @JsonKey(includeFromJson: false, includeToJson: false)  DateTime? lastSensorUpdated)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int sensorId,  int? deviceId,  int? portNumber,  String? name,  String? slug,  int sensorDataType,  String? unit,  SensorUiConfig? uiConfigJson,  DateTime? updatedAt,  double? currentValue,  DateTime? lastSensorUpdated)?  $default,) {final _that = this;
 switch (_that) {
 case _Sensor() when $default != null:
 return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.slug,_that.sensorDataType,_that.unit,_that.uiConfigJson,_that.updatedAt,_that.currentValue,_that.lastSensorUpdated);case _:
@@ -231,7 +231,7 @@ return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.
 @JsonSerializable()
 
 class _Sensor implements Sensor {
-  const _Sensor({required this.sensorId, this.deviceId, this.portNumber, this.name, this.slug, required this.sensorDataType, this.unit, this.uiConfigJson, this.updatedAt, @JsonKey(includeFromJson: false, includeToJson: false) this.currentValue, @JsonKey(includeFromJson: false, includeToJson: false) this.lastSensorUpdated});
+  const _Sensor({required this.sensorId, this.deviceId, this.portNumber, this.name, this.slug, required this.sensorDataType, this.unit, this.uiConfigJson, this.updatedAt, this.currentValue, this.lastSensorUpdated});
   factory _Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 
 @override final  int sensorId;
@@ -243,8 +243,8 @@ class _Sensor implements Sensor {
 @override final  String? unit;
 @override final  SensorUiConfig? uiConfigJson;
 @override final  DateTime? updatedAt;
-@override@JsonKey(includeFromJson: false, includeToJson: false) final  double? currentValue;
-@override@JsonKey(includeFromJson: false, includeToJson: false) final  DateTime? lastSensorUpdated;
+@override final  double? currentValue;
+@override final  DateTime? lastSensorUpdated;
 
 /// Create a copy of Sensor
 /// with the given fields replaced by the non-null parameter values.
@@ -279,7 +279,7 @@ abstract mixin class _$SensorCopyWith<$Res> implements $SensorCopyWith<$Res> {
   factory _$SensorCopyWith(_Sensor value, $Res Function(_Sensor) _then) = __$SensorCopyWithImpl;
 @override @useResult
 $Res call({
- int sensorId, int? deviceId, int? portNumber, String? name, String? slug, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson, DateTime? updatedAt,@JsonKey(includeFromJson: false, includeToJson: false) double? currentValue,@JsonKey(includeFromJson: false, includeToJson: false) DateTime? lastSensorUpdated
+ int sensorId, int? deviceId, int? portNumber, String? name, String? slug, int sensorDataType, String? unit, SensorUiConfig? uiConfigJson, DateTime? updatedAt, double? currentValue, DateTime? lastSensorUpdated
 });
 
 

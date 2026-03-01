@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'sensor_ui_config.dart';
+import 'package:iiot_monitoring/src/shared/models/sensor_ui_config.dart';
 
 part 'sensor.freezed.dart';
 part 'sensor.g.dart';
@@ -17,10 +16,11 @@ abstract class Sensor with _$Sensor {
     String? unit,
     SensorUiConfig? uiConfigJson,
     DateTime? updatedAt,
-    @JsonKey(includeFromJson: false, includeToJson: false) double? currentValue,
-    @JsonKey(includeFromJson: false, includeToJson: false)
+    double? currentValue,
     DateTime? lastSensorUpdated,
   }) = _Sensor;
 
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 }
+
+// Force update 1

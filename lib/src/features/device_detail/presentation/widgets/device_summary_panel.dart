@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import '../../../../shared/widgets/iiot_card.dart';
 
 /// Сводка по устройству: показывает общее количество датчиков,

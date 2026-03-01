@@ -7,7 +7,6 @@ import 'package:iiot_monitoring/src/features/dashboard/presentation/controllers/
 import 'package:iiot_monitoring/src/features/dashboard/presentation/widgets/device_card.dart';
 import 'package:iiot_monitoring/src/features/dashboard/presentation/widgets/dashboard_skeleton.dart';
 import 'package:iiot_monitoring/src/features/dashboard/presentation/widgets/realtime_clock_card.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/calculated_device.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -40,7 +39,7 @@ class DashboardScreen extends ConsumerWidget {
 
                 return dashboardState.when(
                   data: (data) {
-                    final typedDevices = data as List<CalculatedDevice>;
+                    final typedDevices = data;
                     if (typedDevices.isEmpty) {
                       return const Padding(
                         padding: EdgeInsets.only(top: 64),
@@ -91,8 +90,8 @@ class _StatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primaryBg = theme.colorScheme.primary.withOpacity(0.05);
-    final errorBg = theme.colorScheme.error.withOpacity(0.05);
+    final primaryBg = theme.colorScheme.primary.withValues(alpha: .05);
+    final errorBg = theme.colorScheme.error.withValues(alpha: .05);
 
     return IiotCard(
       child: Row(
@@ -143,7 +142,7 @@ class _StatusCard extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 22,
-                  color: theme.colorScheme.onSurface.withOpacity(0.65),
+                  color: theme.colorScheme.onSurface.withValues(alpha: .65),
                 ),
               ),
             ],
@@ -151,7 +150,7 @@ class _StatusCard extends StatelessWidget {
           IconButton(
             onPressed: isLoading ? null : onRefresh,
             style: IconButton.styleFrom(
-              backgroundColor: theme.colorScheme.surfaceVariant,
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
               padding: const EdgeInsets.all(8),
             ),
             icon: const Icon(Icons.refresh_rounded, size: 24),

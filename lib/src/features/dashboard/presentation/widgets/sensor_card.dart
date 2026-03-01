@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:exui/exui.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 import 'package:material_symbols_icons/get.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/sensor_status.dart';
 import 'package:iiot_monitoring/src/core/monitoring/extensions/sensor_status_ui.dart';
 
 class SensorCard extends StatefulWidget {
@@ -69,7 +67,7 @@ class _SensorCardState extends State<SensorCard> {
                   end: Alignment.bottomCenter,
                   colors: [
                     theme.colorScheme.surface,
-                    statusColor.withOpacity(0.15),
+                    statusColor.withValues(alpha: .15),
                   ],
                 ),
               ),
@@ -98,7 +96,9 @@ class _SensorCardState extends State<SensorCard> {
                         sensor.sensorDataType == 0 ? 'Аналоговый' : 'Цифровой',
                         style: TextStyle(
                           fontSize: 10,
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: .6,
+                          ),
                         ),
                       ),
                     ].column(crossAxisAlignment: CrossAxisAlignment.start),
@@ -134,7 +134,9 @@ class _SensorCardState extends State<SensorCard> {
                         'Port: ${sensor.portNumber}',
                         style: TextStyle(
                           fontSize: 12,
-                          color: theme.colorScheme.onSurface.withOpacity(0.4),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: .4,
+                          ),
                         ),
                       ),
                       if (evaluation.alarmStartedAt != null)

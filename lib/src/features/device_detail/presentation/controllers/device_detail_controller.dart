@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../../shared/models/device.dart';
 import '../../../dashboard/presentation/controllers/calculated_device_notifier.dart';
 import '../../../../core/monitoring/models/calculated_device.dart';
 
@@ -13,7 +12,7 @@ class DeviceDetailController extends _$DeviceDetailController {
 
     return dashboardState.whenData((devices) {
       try {
-        final typedDevices = devices as List<CalculatedDevice>;
+        final typedDevices = devices;
         return typedDevices.firstWhere((d) => d.device.id == deviceId);
       } catch (_) {
         return null;

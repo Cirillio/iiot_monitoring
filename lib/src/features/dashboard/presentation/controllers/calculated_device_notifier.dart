@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_device.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/device_summary.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/sensor_evaluation.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/sensor_status.dart';
 import 'package:iiot_monitoring/src/core/monitoring/sensor_evaluator.dart';
 import 'package:iiot_monitoring/src/core/monitoring/sensor_processing_notifier.dart';

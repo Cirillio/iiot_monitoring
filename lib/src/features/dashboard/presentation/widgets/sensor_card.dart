@@ -55,7 +55,8 @@ class _SensorCardState extends State<SensorCard> {
         return GestureDetector(
           onTapDown: (_) => _statesController.update(WidgetState.pressed, true),
           onTapUp: (_) => _statesController.update(WidgetState.pressed, false),
-          onTapCancel: () => _statesController.update(WidgetState.pressed, false),
+          onTapCancel: () =>
+              _statesController.update(WidgetState.pressed, false),
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 150),
             opacity: isPressed ? 0.6 : 1.0,
@@ -124,24 +125,29 @@ class _SensorCardState extends State<SensorCard> {
                       color: statusColor,
                     ),
                   ).center(),
-                  if (evaluation.alarmStartedAt != null)
-                    Text(
-                      'Alarm: ${_formatDuration(evaluation.alarmStartedAt!)}',
-                      style: const TextStyle(fontSize: 9, color: Colors.redAccent),
-                    ).center(),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         'Port: ${sensor.portNumber}',
                         style: TextStyle(
-                          fontSize: 8,
+                          fontSize: 12,
                           color: theme.colorScheme.onSurface.withOpacity(0.4),
                         ),
                       ),
+                      if (evaluation.alarmStartedAt != null)
+                        Text(
+                          'Alarm: ${_formatDuration(evaluation.alarmStartedAt!)}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.redAccent,
+                          ),
+                        ).center(),
                       Icon(
                         evaluation.status.icon,
-                        size: 10,
+                        size: 12,
                         color: statusColor,
                       ),
                     ],

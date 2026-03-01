@@ -12,11 +12,15 @@ import '../../../../shared/widgets/iiot_card.dart';
 class DeviceSensorStatusPanels extends StatelessWidget {
   final int okCount;
   final int alertCount;
+  final int criticalCount;
+  final int offlineCount;
 
   const DeviceSensorStatusPanels({
     super.key,
     required this.okCount,
     required this.alertCount,
+    required this.criticalCount,
+    required this.offlineCount,
   });
 
   @override
@@ -27,12 +31,13 @@ class DeviceSensorStatusPanels extends StatelessWidget {
         // В норме
         Expanded(
           child: IiotCard(
+            border: BoxBorder.all(
+              color: okCount > 0 ? Colors.green : Colors.transparent,
+            ),
             child: _SummaryItem(
-              icon: LucideIcons.checkCircle,
-              label: 'В норме',
-              value: okCount,
+              label: 'OK',
+              count: okCount,
               color: Colors.green,
-              backgroundColor: Colors.green.withValues(alpha: 0.1),
             ),
           ),
         ),
@@ -40,13 +45,39 @@ class DeviceSensorStatusPanels extends StatelessWidget {
         // Тревоги
         Expanded(
           child: IiotCard(
+            border: BoxBorder.all(
+              color: alertCount > 0 ? Colors.orange : Colors.transparent,
+            ),
             child: _SummaryItem(
-              icon: LucideIcons.alertTriangle,
-              label: 'Тревоги',
-              value: alertCount,
-              color: alertCount > 0 ? Colors.red : Colors.orange,
-              backgroundColor: (alertCount > 0 ? Colors.red : Colors.orange)
-                  .withValues(alpha: 0.1),
+              label: 'WARN',
+              count: alertCount,
+              color: Colors.orange,
+            ),
+          ),
+        ),
+        // Тревоги
+        Expanded(
+          child: IiotCard(
+            border: BoxBorder.all(
+              color: criticalCount > 0 ? Colors.red : Colors.transparent,
+            ),
+            child: _SummaryItem(
+              label: 'CRIT',
+              count: criticalCount,
+              color: Colors.red,
+            ),
+          ),
+        ),
+        // Тревоги
+        Expanded(
+          child: IiotCard(
+            border: BoxBorder.all(
+              color: offlineCount == 0 ? Colors.transparent : Colors.grey,
+            ),
+            child: _SummaryItem(
+              label: 'OFF',
+              count: offlineCount,
+              color: Colors.grey,
             ),
           ),
         ),
@@ -57,47 +88,33 @@ class DeviceSensorStatusPanels extends StatelessWidget {
 
 /// Отдельный элемент сводки (плашка с иконкой, заголовком и цифрой)
 class _SummaryItem extends StatelessWidget {
-  final IconData icon;
   final String label;
-  final int value;
+  final int count;
   final Color color;
-  final Color backgroundColor;
 
   const _SummaryItem({
-    required this.icon,
     required this.label,
-    required this.value,
+    required this.count,
     required this.color,
-    required this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            shape: BoxShape.circle,
+        Text(
+          count.toString(),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: color,
           ),
-          child: Icon(icon, color: color, size: 20),
         ),
         Text(
           label,
           style: TextStyle(
             fontSize: 18,
-            color: color,
-            fontWeight: FontWeight(600),
-          ),
-        ),
-        Text(
-          value.toString(),
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: color,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
           ),
         ),
       ],

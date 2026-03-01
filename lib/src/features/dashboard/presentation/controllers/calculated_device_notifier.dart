@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_device.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
@@ -9,21 +10,30 @@ import 'package:iiot_monitoring/src/core/monitoring/sensor_processing_notifier.d
 import 'package:iiot_monitoring/src/shared/models/metric.dart';
 import 'package:iiot_monitoring/src/features/dashboard/data/device_repository.dart';
 import 'package:iiot_monitoring/src/features/dashboard/data/mapper.dart';
+import 'package:iiot_monitoring/src/core/network/signalr_service.dart';
 
 part 'calculated_device_notifier.g.dart';
 
 @Riverpod(keepAlive: true)
 class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
+  StreamSubscription<Metric>? _metricsSubscription;
+
   @override
   Future<List<CalculatedDevice>> build() async {
+    print('Notifier: Starting initialization...');
+
     final repository = ref.watch(deviceRepositoryProvider);
+    final signalR = ref.watch(signalRServiceProvider);
+
+    print('Notifier: Fetching devices from repository...');
     final deviceDtos = await repository.getDevices();
+    print('Notifier: Received ${deviceDtos.length} device DTOs');
 
     final devices = deviceDtos
         .map((dto) => Mapper.toCalculatedDevice(dto))
         .toList();
 
-    // Начальная инициализация
+    // Начальная инициализация истории
     for (var device in devices) {
       for (var sensor in device.sensors) {
         ref
@@ -32,17 +42,42 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
       }
     }
 
+    // Запускаем SignalR
+    print('Notifier: Starting SignalR service...');
+    unawaited(signalR.start());
+
+    // Подписываемся на метрики
+    print('Notifier: Subscribing to metrics stream...');
+    _metricsSubscription?.cancel();
+    _metricsSubscription = signalR.metricsStream.listen((metric) {
+      processMetric(metric);
+    });
+
+    ref.onDispose(() {
+      print('Notifier: Disposing notifier and cancelling subscription');
+      _metricsSubscription?.cancel();
+    });
+
+    print(
+      'Notifier: Initialization complete. Total devices: ${devices.length}',
+    );
     return devices;
   }
 
   void processMetric(Metric metric) {
+    // print('Notifier: Processing metric for sensor ${metric.sensorId}, value: ${metric.value}');
+
     state.whenData((devices) {
+      bool sensorFound = false;
       final updatedDevices = devices.map((device) {
         final sensorIndex = device.sensors.indexWhere(
           (s) => s.sensor.sensorId == metric.sensorId,
         );
 
         if (sensorIndex == -1) return device;
+
+        sensorFound = true;
+        // print('Notifier: Found sensor in device ${device.device.name}');
 
         final previousEvaluation = ref.read(
           sensorProcessingProvider,
@@ -69,7 +104,11 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
         );
       }).toList();
 
-      state = AsyncData(updatedDevices);
+      if (!sensorFound) {
+        // print('Notifier: Warning! Received metric for unknown sensor ID: ${metric.sensorId}');
+      } else {
+        state = AsyncData(updatedDevices);
+      }
     });
   }
 

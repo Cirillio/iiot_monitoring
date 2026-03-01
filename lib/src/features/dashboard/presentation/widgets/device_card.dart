@@ -24,7 +24,9 @@ class DeviceCard extends StatelessWidget {
             height: 12,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: domainDevice.isActive ? Colors.greenAccent : Colors.redAccent,
+              color: domainDevice.isActive
+                  ? Colors.greenAccent
+                  : Colors.redAccent,
             ),
           ),
           const SizedBox(width: 24),
@@ -51,15 +53,35 @@ class DeviceCard extends StatelessWidget {
               color: theme.colorScheme.onSurface.withOpacity(0.4),
             ),
           ),
-        ].row().padding(const EdgeInsets.symmetric(horizontal: 12, vertical: 6)),
+        ].row().padding(
+          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        ),
 
         // Summary Statistics
         [
-          _SummaryItem(label: 'OK', count: device.summary.normalCount, color: Colors.greenAccent),
-          _SummaryItem(label: 'WARN', count: device.summary.warningCount, color: Colors.orangeAccent),
-          _SummaryItem(label: 'CRIT', count: device.summary.criticalCount, color: Colors.redAccent),
-          _SummaryItem(label: 'OFF', count: device.summary.offlineCount, color: Colors.grey),
-        ].row(mainAxisAlignment: MainAxisAlignment.spaceAround).padding(const EdgeInsets.symmetric(vertical: 8)),
+              _SummaryItem(
+                label: 'OK',
+                count: device.summary.normalCount,
+                color: Colors.greenAccent,
+              ),
+              _SummaryItem(
+                label: 'WARN',
+                count: device.summary.warningCount,
+                color: Colors.orangeAccent,
+              ),
+              _SummaryItem(
+                label: 'CRIT',
+                count: device.summary.criticalCount,
+                color: Colors.redAccent,
+              ),
+              _SummaryItem(
+                label: 'OFF',
+                count: device.summary.offlineCount,
+                color: Colors.grey,
+              ),
+            ]
+            .row(mainAxisAlignment: MainAxisAlignment.spaceAround)
+            .padding(const EdgeInsets.symmetric(vertical: 8)),
 
         // Sensors Grid (Show only first 4 sensors in the card)
         if (device.sensors.isNotEmpty)
@@ -90,7 +112,8 @@ class DeviceCard extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => DeviceDetailScreen(deviceId: domainDevice.id),
+                  builder: (context) =>
+                      DeviceDetailScreen(deviceId: domainDevice.id),
                 ),
               );
             },
@@ -118,7 +141,11 @@ class _SummaryItem extends StatelessWidget {
   final int count;
   final Color color;
 
-  const _SummaryItem({required this.label, required this.count, required this.color});
+  const _SummaryItem({
+    required this.label,
+    required this.count,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +153,18 @@ class _SummaryItem extends StatelessWidget {
       children: [
         Text(
           count.toString(),
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: color),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
         Text(
           label,
-          style: TextStyle(fontSize: 10, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
+          style: TextStyle(
+            fontSize: 18,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+          ),
         ),
       ],
     );

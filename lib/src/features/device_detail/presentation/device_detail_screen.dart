@@ -98,7 +98,7 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child:
                           ExpandedSensorCard(
-                                sensor: sensor.sensor,
+                                calculatedSensor: sensor,
                                 onTap: () {},
                               )
                               .animate()
@@ -121,7 +121,7 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
                 padding: const EdgeInsets.only(top: 64, bottom: 128),
                 sliver: SliverList.separated(
                   itemCount: items.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 16),
+                  separatorBuilder: (_, _) => const SizedBox(height: 16),
                   itemBuilder: (context, index) => items[index],
                 ),
               );

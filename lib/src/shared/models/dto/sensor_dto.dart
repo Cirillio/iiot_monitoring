@@ -6,6 +6,8 @@ part 'sensor_dto.g.dart';
 
 @freezed
 abstract class SensorDto with _$SensorDto {
+  const SensorDto._();
+
   const factory SensorDto({
     required int sensorId,
     int? deviceId,

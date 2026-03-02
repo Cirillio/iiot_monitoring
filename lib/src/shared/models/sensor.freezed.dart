@@ -230,8 +230,8 @@ return $default(_that.sensorId,_that.deviceId,_that.portNumber,_that.name,_that.
 /// @nodoc
 @JsonSerializable()
 
-class _Sensor implements Sensor {
-  const _Sensor({required this.sensorId, this.deviceId, this.portNumber, this.name, this.slug, required this.sensorDataType, this.unit, this.uiConfigJson, this.updatedAt, this.currentValue, this.lastSensorUpdated});
+class _Sensor extends Sensor {
+  const _Sensor({required this.sensorId, this.deviceId, this.portNumber, this.name, this.slug, required this.sensorDataType, this.unit, this.uiConfigJson, this.updatedAt, this.currentValue, this.lastSensorUpdated}): super._();
   factory _Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 
 @override final  int sensorId;

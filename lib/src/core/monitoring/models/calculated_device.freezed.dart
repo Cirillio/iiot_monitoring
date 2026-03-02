@@ -11,7 +11,6 @@ part of 'calculated_device.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$CalculatedDevice {
 
@@ -22,8 +21,6 @@ mixin _$CalculatedDevice {
 @pragma('vm:prefer-inline')
 $CalculatedDeviceCopyWith<CalculatedDevice> get copyWith => _$CalculatedDeviceCopyWithImpl<CalculatedDevice>(this as CalculatedDevice, _$identity);
 
-  /// Serializes this CalculatedDevice to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is CalculatedDevice&&(identical(other.device, device) || other.device == device)&&const DeepCollectionEquality().equals(other.sensors, sensors)&&(identical(other.summary, summary) || other.summary == summary));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,device,const DeepCollectionEquality().hash(sensors),summary);
 
@@ -226,11 +223,11 @@ return $default(_that.device,_that.sensors,_that.summary);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
 
-class _CalculatedDevice implements CalculatedDevice {
-  const _CalculatedDevice({required this.device, required final  List<CalculatedSensor> sensors, required this.summary}): _sensors = sensors;
-  factory _CalculatedDevice.fromJson(Map<String, dynamic> json) => _$CalculatedDeviceFromJson(json);
+
+class _CalculatedDevice extends CalculatedDevice {
+  const _CalculatedDevice({required this.device, required final  List<CalculatedSensor> sensors, required this.summary}): _sensors = sensors,super._();
+  
 
 @override final  Device device;
  final  List<CalculatedSensor> _sensors;
@@ -248,17 +245,14 @@ class _CalculatedDevice implements CalculatedDevice {
 @pragma('vm:prefer-inline')
 _$CalculatedDeviceCopyWith<_CalculatedDevice> get copyWith => __$CalculatedDeviceCopyWithImpl<_CalculatedDevice>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$CalculatedDeviceToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _CalculatedDevice&&(identical(other.device, device) || other.device == device)&&const DeepCollectionEquality().equals(other._sensors, _sensors)&&(identical(other.summary, summary) || other.summary == summary));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,device,const DeepCollectionEquality().hash(_sensors),summary);
 

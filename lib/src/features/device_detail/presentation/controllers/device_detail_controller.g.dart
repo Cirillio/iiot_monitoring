@@ -66,7 +66,7 @@ final class DeviceDetailControllerProvider
 }
 
 String _$deviceDetailControllerHash() =>
-    r'4855346a361072da485fdda87e1c319f2ce146a6';
+    r'1b3c764e38a01dfe48a291e75b24e95dae46b061';
 
 final class DeviceDetailControllerFamily extends $Family
     with

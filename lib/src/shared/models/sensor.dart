@@ -6,6 +6,8 @@ part 'sensor.g.dart';
 
 @freezed
 abstract class Sensor with _$Sensor {
+  const Sensor._();
+
   const factory Sensor({
     required int sensorId,
     int? deviceId,
@@ -22,5 +24,3 @@ abstract class Sensor with _$Sensor {
 
   factory Sensor.fromJson(Map<String, dynamic> json) => _$SensorFromJson(json);
 }
-
-// Force update 1

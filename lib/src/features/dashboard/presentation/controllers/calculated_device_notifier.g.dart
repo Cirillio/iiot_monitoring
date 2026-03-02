@@ -38,7 +38,7 @@ final class CalculatedDeviceNotifierProvider
 }
 
 String _$calculatedDeviceNotifierHash() =>
-    r'b0c1cc3b8642b42f2ce12cb54cd7314533357b1e';
+    r'bd10bd0a7745b493433b45a3f9c9274e607c2556';
 
 abstract class _$CalculatedDeviceNotifier
     extends $AsyncNotifier<List<CalculatedDevice>> {

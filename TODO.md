@@ -1,280 +1,126 @@
-# Архитектура загрузки и обработки данных — IIoT Monitoring (Flutter)
-
-## Обзор
-
-Приложение использует модель **single source of truth** : все данные загружаются один раз при старте и живут в памяти. Экраны не делают собственных запросов к API — они читают из единого state-слоя.
+Ниже приведены четкие инструкции по каждому слою приложения, начиная с правильной генерации моделей.
 
 ---
 
-## Слои архитектуры
+### 1. Правильная работа с Freezed (Генерация моделей)
+
+Так как в проекте принято использовать `abstract class` для моделей Freezed (это классический и надежный подход, который отлично работает с кастомными методами и геттерами), каждый файл модели должен строго следовать этому шаблону.
+
+**Шаблон правильного исходника (`.dart`):**
+
+**Dart**
 
 ```
-┌─────────────────────────────────────────┐
-│             Presentation Layer          │
-│   DashboardScreen / DeviceScreen /      │
-│   SensorScreen                          │
-│   DeviceCard / SensorCard               │
-├─────────────────────────────────────────┤
-│              State Layer                │
-│   CalculatedDeviceNotifier              │
-│   SensorProcessingNotifier              │
-├─────────────────────────────────────────┤
-│              Domain Layer               │
-│   SensorEvaluator                       │
-│   CalculatedDevice / CalculatedSensor   │
-│   SensorEvaluation / SensorStatus       │
-│   DeviceSummary                         │
-├─────────────────────────────────────────┤
-│               Data Layer                │
-│   DeviceRepository (Dio)                │
-│   SignalRService                        │
-│   DeviceDto / SensorDto                 │
-│   Mapper                                │
-└─────────────────────────────────────────┘
-```
+ import 'package:freezed_annotation/freezed_annotation.dart';
 
----
+// Обязательно указываем part-файлы
+part 'my_model.freezed.dart';
+part 'my_model.g.dart'; // Если нужна (де)сериализация JSON
 
-## Модели данных
+@freezed
+abstract class MyModel with _$MyModel {
+  // Приватный конструктор нужен, если внутри класса будут кастомные геттеры или методы
+  const MyModel._();
 
-### Data Layer
+  const factory MyModel({
+    required int id,
+    required String name,
+    // ... остальные поля
+  }) = _MyModel;
 
-**`DeviceDto`** — сырой ответ от API. Содержит `List<SensorDto>`. Используется только для десериализации, в UI не попадает.
+  factory MyModel.fromJson(Map<String, dynamic> json) => _$MyModelFromJson(json);
 
-### Domain Layer
-
-**`Device`** — доменная сущность устройства. Без списка сенсоров — они живут отдельно в `CalculatedSensor`.
-
-**`Sensor`** — доменная сущность датчика. Содержит конфиг порогов (`SensorUiConfig`), но не содержит текущего значения или статуса.
-
-**`SensorStatus`** — enum состояния датчика:
-
-```
-idle      — начальное состояние, данных ещё не было
-normal    — значение в пределах нормы
-warning   — значение пересекло предупредительный порог
-critical  — значение пересекло критический порог
-offline   — данные не поступали дольше N секунд (heartbeat)
-noConfig  — у датчика нет настроенных порогов
-```
-
-**`SensorEvaluation`** — результат оценки одного датчика:
-
-```dart
-SensorEvaluation {
-  SensorStatus status
-  double? value           // текущее значение
-  DateTime? alarmStartedAt // время начала аларма, null если normal
-  String? message         // человекочитаемое описание
+  // Пример кастомного геттера (поэтому нужен const MyModel._(); выше)
+  bool get isReady => id > 0;
 }
 ```
 
-**`CalculatedSensor`** — обёртка: датчик + его оценка:
+**Инструкция по генерации:**
+После любого изменения или создания нового файла с аннотацией `@freezed`, обязательно запускай скрипт кодогенерации с флагом удаления конфликтующих файлов (иначе build_runner может зависнуть на старых кэшах):
 
-```dart
-CalculatedSensor {
-  Sensor sensor
-  SensorEvaluation evaluation
-}
+В терминале в корне проекта:
+
+**Bash**
+
+```
+dart run build_runner build --delete-conflicting-outputs
 ```
 
-**`DeviceSummary`** — агрегированная статистика устройства:
-
-```dart
-DeviceSummary {
-  int normalCount
-  int warningCount
-  int criticalCount
-  int offlineCount
-  int noConfigCount
-}
-```
-
-**`CalculatedDevice`** — обёртка: устройство + список оценённых датчиков + сводка:
-
-```dart
-CalculatedDevice {
-  Device device
-  List<CalculatedSensor> sensors
-  DeviceSummary summary
-}
-```
+_(Или `flutter pub run build_runner build -d`, если используешь старую версию Flutter cli)_ .
 
 ---
 
-## Поток данных
+### 2. Доработка доменного слоя (Слой мониторинга)
 
-### Фаза 1 — Инициализация
+В ветке `monitoring-refactor` у нас появились DTO (Data Transfer Objects) и модели вычисляемых устройств (`CalculatedDevice`, `SensorEvaluation`). Это правильный шаг к разделению API-ответов и бизнес-логики UI.
+
+**Что нужно сделать:**
+
+1. **Обновить `SensorUiConfig`** :
+   Добавить поля для цифровых датчиков, чтобы логика `SensorEvaluator` могла с ними работать.
+   **Dart**
 
 ```
-App Start
-    │
-    ▼
-DeviceRepository.getDevices()   ← HTTP GET /api/devices (все устройства, без лимита)
-    │
-    ▼
-List<DeviceDto>                 ← сырой JSON от API
-    │
-    ▼
-Mapper.toCalculatedDevices()
-    ├── DeviceDto → Device
-    ├── SensorDto → Sensor
-    └── каждый Sensor → CalculatedSensor(sensor, SensorEvaluation(status: idle))
-    │
-    ▼
-CalculatedDeviceNotifier.init(devices)
-    └── state = List<CalculatedDevice>   ← все устройства в памяти
+   @freezed
+   abstract class SensorUiConfig with _$SensorUiConfig {
+     const SensorUiConfig._();
 
-SignalRService.start()          ← запуск подключения к хабу (параллельно с загрузкой)
+     const factory SensorUiConfig({
+       String? color,
+       String? icon,
+       // ... старые поля
+       double? minCritical,
+       double? minWarning,
+       double? maxWarning,
+       double? maxCritical,
+       // Новые поля для DIGITAL:
+       double? digitalWarning,
+       double? digitalCritical,
+       String? labelZero,
+       String? labelOne,
+     }) = _SensorUiConfig;
+
+     factory SensorUiConfig.fromJson(Map<String, dynamic> json) => _$SensorUiConfigFromJson(json);
+   }
 ```
 
-После этой фазы все экраны уже имеют данные для рендера — устройства, датчики, начальный статус `idle`.
+1. **Доработать `SensorEvaluator` (или `CalculatedSensor`)** :
+   В классе, который вычисляет статус (выдает `SensorStatus.normal`, `warning`, `critical`), нужно прописать логику, которая сначала смотрит на `dataType` (ANALOG или DIGITAL), и в зависимости от этого применяет либо `min/max` лимиты, либо точные совпадения с `digitalCritical/Warning`.
 
 ---
 
-### Фаза 2 — Реалтайм обновления
+### 3. Стейт-менеджмент и Контроллеры (Riverpod)
 
-```
-SignalR Hub → ReceiveMetrics
-    │
-    ▼
-Metric { sensorId, value, time, rawValue }
-    │
-    ▼
-CalculatedDeviceNotifier.processMetric(metric)
-    │
-    ├── находит нужный CalculatedDevice по sensorId
-    ├── находит нужный CalculatedSensor внутри него
-    │
-    ▼
-SensorEvaluator.evaluate(sensor, previousEvaluation)
-    ├── нет value?           → status: offline
-    ├── нет порогов в config? → status: noConfig
-    ├── value > maxCritical? → status: critical  (вход — мгновенно)
-    ├── value < maxCritical - noise? → выход из critical (гистерезис)
-    ├── value > maxWarning?  → status: warning
-    └── иначе               → status: normal
-    │
-    ▼
-новый SensorEvaluation
-    │
-    ├── alarmStartedAt:
-    │     если статус не изменился → сохраняем предыдущий alarmStartedAt
-    │     если новый аларм         → DateTime.now()
-    │     если вернулись в normal  → null
-    │
-    ▼
-CalculatedDeviceNotifier обновляет state:
-    ├── заменяет CalculatedSensor в списке
-    └── пересобирает DeviceSummary (один проход по списку сенсоров)
-    │
-    ▼
-Riverpod уведомляет подписчиков → виджеты перестраиваются
-```
+Текущая архитектура подразумевает, что сырые данные приходят из сети, а затем пропускаются через `SensorProcessingNotifier` или аналог.
+
+**Инструкции по рефакторингу состояний:**
+
+1. **Разделение потоков** :
+
+- `DeviceRepository` должен возвращать строго `List<DeviceDto>`. Он не должен ничего знать про цвета, статусы и алерты.
+- `SignalRService` должен возвращать поток `Metric`.
+- Контроллер дашборда (`CalculatedDeviceNotifier`) должен объединять (combine) эти два источника: брать базовую конфигурацию, накладывать сверху живую метрику, пропускать через `SensorEvaluator` и выдавать в UI готовый `CalculatedDevice`.
+
+1. **Обработка ошибок при загрузке** :
+   В `CalculatedDeviceNotifier` нужно убедиться, что если API недоступно, но есть кэш в `SharedPreferences`, система покажет старые устройства, а крутилка `loading` будет только для обновления статусов сети (Silent loading).
 
 ---
 
-## Гистерезис
+### 4. Доработка UI (Макетирование и Сшивание)
 
-Проблема без гистерезиса: датчик на значении 9.48 при пороге 9.5 будет мерцать между `normal` и `critical` при каждом новом значении. UI нестабилен.
+1. **Интеграция UI и вычисленных моделей** :
 
-Решение: выход из аларма требует чтобы значение ушло дальше порога на `noiseLevel`.
+- Виджеты (`DeviceCard`, `SensorCard`, `ExpandedSensorCard`) больше не должны сами вычислять, красные они или зеленые.
+- Они должны принимать модель `CalculatedSensor` или `SensorEvaluation`, в которой **уже есть** поле `SensorStatus status`.
+- UI должен быть абсолютно «тупым»:
+  **Dart**
 
-```
-noiseLevel = (maxCritical - minCritical) * 0.02   // 2% от диапазона
+  ```
+  // Пример внутри SensorCard
+  final color = sensor.evaluation.status == SensorStatus.critical
+      ? Colors.red
+      : Colors.green;
+  ```
 
-Вход в critical:  value >= maxCritical
-Выход из critical: value < maxCritical - noiseLevel
-```
-
-Таким образом у порога образуется "мёртвая зона" — датчик не переключается туда-обратно при незначительных колебаниях.
-
----
-
-## Навигация между экранами
-
-Все экраны читают данные из `CalculatedDeviceNotifier`. Никаких дополнительных запросов при переходе.
-
-```
-DashboardScreen
-└── ref.watch(calculatedDeviceNotifierProvider)
-    └── показывает List<CalculatedDevice>
-        └── DeviceCard(calculatedDevice)
-            └── SensorCard(calculatedSensor)   ← первые 2, остальные по кнопке
-
-DeviceScreen(deviceId)
-└── ref.watch(calculatedDeviceNotifierProvider)
-    └── находит нужный CalculatedDevice по deviceId
-        ├── характеристики устройства
-        ├── DeviceSummary (счётчики норм/тревога/критикал)
-        └── полный список SensorCard
-
-SensorScreen(sensorId)
-└── ref.watch(calculatedDeviceNotifierProvider)
-    └── находит нужный CalculatedSensor по sensorId
-        ├── текущее значение и статус
-        ├── время начала аларма
-        └── график истории (отдельный запрос к API)
-```
-
----
-
-## Ответственность слоёв
-
-| Компонент                    | Отвечает за                                                                    |
-| ---------------------------- | ------------------------------------------------------------------------------ |
-| `DeviceRepository`           | HTTP-запрос, десериализация `DeviceDto`                                        |
-| `Mapper`                     | `DeviceDto`→`Device`+`List<CalculatedSensor>`с `idle`статусом                  |
-| `SignalRService`             | подключение к хабу, эмит `Stream<Metric>`                                      |
-| `SensorEvaluator`            | чистая логика оценки, гистерезис,`alarmStartedAt`                              |
-| `SensorProcessingNotifier`   | хранит историю `Map<int, SensorEvaluation>`для гистерезиса                     |
-| `CalculatedDeviceNotifier`   | единственный источник истины, обновляет state при метриках                     |
-| `DeviceCard`                 | `ConsumerWidget`, читает `CalculatedDevice`, собирает `CalculatedSensor`список |
-| `SensorCard`                 | тупой виджет, только рендер, принимает `CalculatedSensor`                      |
-| `SensorStatus`extension (UI) | маппинг `SensorStatus`→`Color`,`IconData`                                      |
-
----
-
-## Что не делают виджеты
-
-- Не вычисляют статус датчика
-- Не читают пороги из `uiConfigJson` напрямую
-- Не делают запросы к API при открытии экрана
-- Не хранят локальные копии данных
-
----
-
-## Структура файлов
-
-```
-lib/src/
-├── core/
-│   └── monitoring/
-│       ├── models/
-│       │   ├── sensor_status.dart
-│       │   ├── sensor_evaluation.dart
-│       │   ├── calculated_sensor.dart
-│       │   ├── device_summary.dart
-│       │   └── calculated_device.dart
-│       ├── extensions/
-│       │   └── sensor_status_ui.dart       ← Color, IconData маппинг
-│       ├── sensor_evaluator.dart
-│       └── sensor_processing_notifier.dart
-├── features/
-│   └── dashboard/
-│       ├── data/
-│       │   ├── device_repository.dart
-│       │   └── mapper.dart                 ← DeviceDto → CalculatedDevice
-│       └── presentation/
-│           ├── controllers/
-│           │   └── calculated_device_notifier.dart
-│           └── widgets/
-│               ├── device_card.dart        ← ConsumerWidget
-│               └── sensor_card.dart        ← принимает CalculatedSensor
-└── shared/
-    └── models/
-        ├── device.dart                     ← без List<Sensor>
-        ├── sensor.dart
-        ├── sensor_ui_config.dart
-        └── metric.dart
-```
+1. **Безопасные Null-проверки в UI** :
+   Везде, где используется `uiConfig?.icon` или `uiConfig?.color`, прописать fallback-значения, если бэкенд прислал `null` (например, иконка по умолчанию `Icons.sensors` и цвет `Colors.grey`).

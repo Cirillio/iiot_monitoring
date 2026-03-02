@@ -4,16 +4,14 @@ import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dar
 import 'package:iiot_monitoring/src/core/monitoring/models/device_summary.dart';
 
 part 'calculated_device.freezed.dart';
-part 'calculated_device.g.dart';
 
 @freezed
 abstract class CalculatedDevice with _$CalculatedDevice {
+  const CalculatedDevice._();
+
   const factory CalculatedDevice({
     required Device device,
     required List<CalculatedSensor> sensors,
     required DeviceSummary summary,
   }) = _CalculatedDevice;
-
-  factory CalculatedDevice.fromJson(Map<String, dynamic> json) =>
-      _$CalculatedDeviceFromJson(json);
 }

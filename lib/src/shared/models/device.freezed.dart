@@ -216,8 +216,8 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_th
 /// @nodoc
 @JsonSerializable()
 
-class _Device implements Device {
-  const _Device({required this.id, this.name, this.ipAddress, this.port, this.slaveId, required this.isActive, this.createdAt, final  List<Sensor> sensors = const [], this.totalSensors = 0}): _sensors = sensors;
+class _Device extends Device {
+  const _Device({required this.id, this.name, this.ipAddress, this.port, this.slaveId, required this.isActive, this.createdAt, final  List<Sensor> sensors = const [], this.totalSensors = 0}): _sensors = sensors,super._();
   factory _Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 
 @override final  int id;

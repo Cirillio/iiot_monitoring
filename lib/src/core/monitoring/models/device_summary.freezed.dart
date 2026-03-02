@@ -11,7 +11,6 @@ part of 'device_summary.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$DeviceSummary {
 
@@ -22,8 +21,6 @@ mixin _$DeviceSummary {
 @pragma('vm:prefer-inline')
 $DeviceSummaryCopyWith<DeviceSummary> get copyWith => _$DeviceSummaryCopyWithImpl<DeviceSummary>(this as DeviceSummary, _$identity);
 
-  /// Serializes this DeviceSummary to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is DeviceSummary&&(identical(other.normalCount, normalCount) || other.normalCount == normalCount)&&(identical(other.warningCount, warningCount) || other.warningCount == warningCount)&&(identical(other.criticalCount, criticalCount) || other.criticalCount == criticalCount)&&(identical(other.offlineCount, offlineCount) || other.offlineCount == offlineCount)&&(identical(other.noConfigCount, noConfigCount) || other.noConfigCount == noConfigCount));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,normalCount,warningCount,criticalCount,offlineCount,noConfigCount);
 
@@ -210,11 +207,11 @@ return $default(_that.normalCount,_that.warningCount,_that.criticalCount,_that.o
 }
 
 /// @nodoc
-@JsonSerializable()
 
-class _DeviceSummary implements DeviceSummary {
-  const _DeviceSummary({this.normalCount = 0, this.warningCount = 0, this.criticalCount = 0, this.offlineCount = 0, this.noConfigCount = 0});
-  factory _DeviceSummary.fromJson(Map<String, dynamic> json) => _$DeviceSummaryFromJson(json);
+
+class _DeviceSummary extends DeviceSummary {
+  const _DeviceSummary({this.normalCount = 0, this.warningCount = 0, this.criticalCount = 0, this.offlineCount = 0, this.noConfigCount = 0}): super._();
+  
 
 @override@JsonKey() final  int normalCount;
 @override@JsonKey() final  int warningCount;
@@ -228,17 +225,14 @@ class _DeviceSummary implements DeviceSummary {
 @pragma('vm:prefer-inline')
 _$DeviceSummaryCopyWith<_DeviceSummary> get copyWith => __$DeviceSummaryCopyWithImpl<_DeviceSummary>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$DeviceSummaryToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _DeviceSummary&&(identical(other.normalCount, normalCount) || other.normalCount == normalCount)&&(identical(other.warningCount, warningCount) || other.warningCount == warningCount)&&(identical(other.criticalCount, criticalCount) || other.criticalCount == criticalCount)&&(identical(other.offlineCount, offlineCount) || other.offlineCount == offlineCount)&&(identical(other.noConfigCount, noConfigCount) || other.noConfigCount == noConfigCount));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,normalCount,warningCount,criticalCount,offlineCount,noConfigCount);
 

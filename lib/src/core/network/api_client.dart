@@ -5,7 +5,8 @@ part 'api_client.g.dart';
 
 @riverpod
 // String baseUrl(Ref ref) => 'http://10.0.2.2:5000';
-String baseUrl(Ref ref) => 'http://192.168.0.13:5000';
+String baseUrl(Ref ref) => 'http://10.88.150.2:5000';
+// String baseUrl(Ref ref) => 'http://192.168.0.13:5000';
 
 @riverpod
 Dio dio(Ref ref) {

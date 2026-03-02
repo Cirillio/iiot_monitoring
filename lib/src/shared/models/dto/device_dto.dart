@@ -6,6 +6,8 @@ part 'device_dto.g.dart';
 
 @freezed
 abstract class DeviceDto with _$DeviceDto {
+  const DeviceDto._();
+
   const factory DeviceDto({
     required int id,
     String? name,

@@ -29,12 +29,32 @@ class _SensorCardState extends State<SensorCard> {
   }
 
   Color _parseHexColor(String? hex) {
-    if (hex == null) return Colors.white;
+    if (hex == null) return Colors.grey;
     try {
       return Color(int.parse(hex.replaceFirst('#', '0xff')));
     } catch (_) {
-      return Colors.white;
+      return Colors.grey;
     }
+  }
+
+  String _getDisplayValue() {
+    final evaluation = widget.sensor.evaluation;
+    final sensor = widget.sensor.sensor;
+    final config = sensor.uiConfigJson;
+
+    if (evaluation.value == null) return '--';
+
+    if (sensor.sensorDataType == 1) {
+      if (evaluation.value == 0 && config?.labelZero != null) {
+        return config!.labelZero!;
+      }
+      if (evaluation.value == 1 && config?.labelOne != null) {
+        return config!.labelOne!;
+      }
+      return evaluation.value!.toStringAsFixed(0);
+    }
+
+    return '${evaluation.value!.toStringAsFixed(1)} ${sensor.unit ?? ''}';
   }
 
   @override
@@ -76,7 +96,7 @@ class _SensorCardState extends State<SensorCard> {
                 [
                   Icon(
                     SymbolsGet.get(
-                      sensor.uiConfigJson?.icon ?? 'horizontal_rule',
+                      sensor.uiConfigJson?.icon ?? 'sensors',
                       SymbolStyle.rounded,
                     ),
                     color: iconColor,
@@ -118,7 +138,7 @@ class _SensorCardState extends State<SensorCard> {
                 // Bottom Value
                 [
                   Text(
-                    '${evaluation.value?.toStringAsFixed(1) ?? '--'} ${sensor.unit ?? ''}',
+                    _getDisplayValue(),
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

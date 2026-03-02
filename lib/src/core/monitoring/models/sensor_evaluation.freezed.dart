@@ -11,7 +11,6 @@ part of 'sensor_evaluation.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$SensorEvaluation {
 
@@ -22,8 +21,6 @@ mixin _$SensorEvaluation {
 @pragma('vm:prefer-inline')
 $SensorEvaluationCopyWith<SensorEvaluation> get copyWith => _$SensorEvaluationCopyWithImpl<SensorEvaluation>(this as SensorEvaluation, _$identity);
 
-  /// Serializes this SensorEvaluation to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is SensorEvaluation&&(identical(other.status, status) || other.status == status)&&(identical(other.value, value) || other.value == value)&&(identical(other.alarmStartedAt, alarmStartedAt) || other.alarmStartedAt == alarmStartedAt)&&(identical(other.message, message) || other.message == message));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,status,value,alarmStartedAt,message);
 
@@ -209,11 +206,11 @@ return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);cas
 }
 
 /// @nodoc
-@JsonSerializable()
 
-class _SensorEvaluation implements SensorEvaluation {
-  const _SensorEvaluation({required this.status, this.value, this.alarmStartedAt, this.message});
-  factory _SensorEvaluation.fromJson(Map<String, dynamic> json) => _$SensorEvaluationFromJson(json);
+
+class _SensorEvaluation extends SensorEvaluation {
+  const _SensorEvaluation({required this.status, this.value, this.alarmStartedAt, this.message}): super._();
+  
 
 @override final  SensorStatus status;
 @override final  double? value;
@@ -226,17 +223,14 @@ class _SensorEvaluation implements SensorEvaluation {
 @pragma('vm:prefer-inline')
 _$SensorEvaluationCopyWith<_SensorEvaluation> get copyWith => __$SensorEvaluationCopyWithImpl<_SensorEvaluation>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$SensorEvaluationToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _SensorEvaluation&&(identical(other.status, status) || other.status == status)&&(identical(other.value, value) || other.value == value)&&(identical(other.alarmStartedAt, alarmStartedAt) || other.alarmStartedAt == alarmStartedAt)&&(identical(other.message, message) || other.message == message));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,status,value,alarmStartedAt,message);
 

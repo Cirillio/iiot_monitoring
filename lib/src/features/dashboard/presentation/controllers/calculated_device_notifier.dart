@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_device.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
@@ -7,32 +8,78 @@ import 'package:iiot_monitoring/src/core/monitoring/models/sensor_status.dart';
 import 'package:iiot_monitoring/src/core/monitoring/sensor_evaluator.dart';
 import 'package:iiot_monitoring/src/core/monitoring/sensor_processing_notifier.dart';
 import 'package:iiot_monitoring/src/shared/models/metric.dart';
+import 'package:iiot_monitoring/src/shared/models/dto/device_dto.dart';
 import 'package:iiot_monitoring/src/features/dashboard/data/device_repository.dart';
 import 'package:iiot_monitoring/src/features/dashboard/data/mapper.dart';
 import 'package:iiot_monitoring/src/core/network/signalr_service.dart';
+import 'package:iiot_monitoring/src/core/storage/prefs_provider.dart';
 
 part 'calculated_device_notifier.g.dart';
 
 @Riverpod(keepAlive: true)
 class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
   StreamSubscription<Metric>? _metricsSubscription;
+  static const _cacheKey = 'cached_devices';
 
   @override
   Future<List<CalculatedDevice>> build() async {
-    print('Notifier: Starting initialization...');
-
     final repository = ref.watch(deviceRepositoryProvider);
     final signalR = ref.watch(signalRServiceProvider);
+    final prefs = ref.watch(sharedPreferencesProvider);
 
-    print('Notifier: Fetching devices from repository...');
-    final deviceDtos = await repository.getDevices();
-    print('Notifier: Received ${deviceDtos.length} device DTOs');
+    // 1. Пытаемся загрузить из кэша
+    List<DeviceDto>? cachedDtos;
+    final cacheJson = prefs.getString(_cacheKey);
+    if (cacheJson != null) {
+      try {
+        final List<dynamic> decoded = jsonDecode(cacheJson);
+        cachedDtos = decoded.map((j) => DeviceDto.fromJson(jsonDecode(j))).toList();
+        print('Notifier: Loaded ${cachedDtos.length} devices from cache');
+      } catch (e) {
+        print('Notifier: Error loading cache: $e');
+      }
+    }
 
-    final devices = deviceDtos
-        .map((dto) => Mapper.toCalculatedDevice(dto))
-        .toList();
+    // Если есть кэш, устанавливаем начальное состояние
+    if (cachedDtos != null) {
+      final cachedDevices = cachedDtos.map((dto) => Mapper.toCalculatedDevice(dto)).toList();
+      _initializeHistory(cachedDevices);
+      // Мы не возвращаем сразу, а продолжаем загрузку из API
+      // Но Riverpod позволяет установить начальное значение через state
+      state = AsyncData(cachedDevices);
+    }
 
-    // Начальная инициализация истории
+    // 2. Загружаем из API
+    try {
+      print('Notifier: Fetching devices from API...');
+      final deviceDtos = await repository.getDevices();
+      print('Notifier: Received ${deviceDtos.length} device DTOs from API');
+
+      // Сохраняем в кэш
+      final encoded = jsonEncode(deviceDtos.map((d) => jsonEncode(d.toJson())).toList());
+      await prefs.setString(_cacheKey, encoded);
+
+      final devices = deviceDtos
+          .map((dto) => Mapper.toCalculatedDevice(dto))
+          .toList();
+
+      _initializeHistory(devices);
+
+      // Запускаем SignalR и подписку
+      _setupSignalR(signalR);
+
+      return devices;
+    } catch (e) {
+      if (cachedDtos != null) {
+        print('Notifier: API failed, using cached data');
+        _setupSignalR(signalR);
+        return state.value!;
+      }
+      rethrow;
+    }
+  }
+
+  void _initializeHistory(List<CalculatedDevice> devices) {
     for (var device in devices) {
       for (var sensor in device.sensors) {
         ref
@@ -40,32 +87,19 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
             .updateEvaluation(sensor.sensor.sensorId, sensor.evaluation);
       }
     }
+  }
 
-    // Запускаем SignalR
-    print('Notifier: Starting SignalR service...');
+  void _setupSignalR(SignalRService signalR) {
     unawaited(signalR.start());
-
-    // Подписываемся на метрики
-    print('Notifier: Subscribing to metrics stream...');
     _metricsSubscription?.cancel();
-    _metricsSubscription = signalR.metricsStream.listen((metric) {
-      processMetric(metric);
-    });
+    _metricsSubscription = signalR.metricsStream.listen(processMetric);
 
     ref.onDispose(() {
-      print('Notifier: Disposing notifier and cancelling subscription');
       _metricsSubscription?.cancel();
     });
-
-    print(
-      'Notifier: Initialization complete. Total devices: ${devices.length}',
-    );
-    return devices;
   }
 
   void processMetric(Metric metric) {
-    // print('Notifier: Processing metric for sensor ${metric.sensorId}, value: ${metric.value}');
-
     state.whenData((devices) {
       bool sensorFound = false;
       final updatedDevices = devices.map((device) {
@@ -76,8 +110,6 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
         if (sensorIndex == -1) return device;
 
         sensorFound = true;
-        // print('Notifier: Found sensor in device ${device.device.name}');
-
         final previousEvaluation = ref.read(
           sensorProcessingProvider,
         )[metric.sensorId];
@@ -103,9 +135,7 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
         );
       }).toList();
 
-      if (!sensorFound) {
-        // print('Notifier: Warning! Received metric for unknown sensor ID: ${metric.sensorId}');
-      } else {
+      if (sensorFound) {
         state = AsyncData(updatedDevices);
       }
     });

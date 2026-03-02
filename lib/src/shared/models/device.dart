@@ -6,6 +6,8 @@ part 'device.g.dart';
 
 @freezed
 abstract class Device with _$Device {
+  const Device._();
+
   const factory Device({
     required int id,
     String? name,
@@ -20,5 +22,3 @@ abstract class Device with _$Device {
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 }
-
-// Force update 1

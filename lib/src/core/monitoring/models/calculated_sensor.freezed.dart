@@ -11,7 +11,6 @@ part of 'calculated_sensor.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$CalculatedSensor {
 
@@ -22,8 +21,6 @@ mixin _$CalculatedSensor {
 @pragma('vm:prefer-inline')
 $CalculatedSensorCopyWith<CalculatedSensor> get copyWith => _$CalculatedSensorCopyWithImpl<CalculatedSensor>(this as CalculatedSensor, _$identity);
 
-  /// Serializes this CalculatedSensor to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is CalculatedSensor&&(identical(other.sensor, sensor) || other.sensor == sensor)&&(identical(other.evaluation, evaluation) || other.evaluation == evaluation));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,sensor,evaluation);
 
@@ -225,11 +222,11 @@ return $default(_that.sensor,_that.evaluation);case _:
 }
 
 /// @nodoc
-@JsonSerializable()
 
-class _CalculatedSensor implements CalculatedSensor {
-  const _CalculatedSensor({required this.sensor, required this.evaluation});
-  factory _CalculatedSensor.fromJson(Map<String, dynamic> json) => _$CalculatedSensorFromJson(json);
+
+class _CalculatedSensor extends CalculatedSensor {
+  const _CalculatedSensor({required this.sensor, required this.evaluation}): super._();
+  
 
 @override final  Sensor sensor;
 @override final  SensorEvaluation evaluation;
@@ -240,17 +237,14 @@ class _CalculatedSensor implements CalculatedSensor {
 @pragma('vm:prefer-inline')
 _$CalculatedSensorCopyWith<_CalculatedSensor> get copyWith => __$CalculatedSensorCopyWithImpl<_CalculatedSensor>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$CalculatedSensorToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _CalculatedSensor&&(identical(other.sensor, sensor) || other.sensor == sensor)&&(identical(other.evaluation, evaluation) || other.evaluation == evaluation));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,sensor,evaluation);
 

@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
+import 'package:iiot_monitoring/src/core/monitoring/extensions/sensor_status_ui.dart';
+import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import 'package:material_symbols_icons/get.dart';
-import '../../../../shared/models/sensor.dart';
-import '../../../../shared/widgets/iiot_card.dart';
-import '../../domain/sensor_status_ext.dart';
 import 'threshold_bar.dart';
 
-/// Расширенная карточка датчика для страницы устройства.
-///
-/// Содержит:
-/// - Верхний ряд: иконка, название, текущее значение с единицей измерения
-/// - Средний ряд: ThresholdBar с уставками
-/// - Нижний ряд: slug и data_type серым текстом
 class ExpandedSensorCard extends StatefulWidget {
-  final Sensor sensor;
+  final CalculatedSensor calculatedSensor;
   final VoidCallback? onTap;
 
-  const ExpandedSensorCard({super.key, required this.sensor, this.onTap});
+  const ExpandedSensorCard({
+    super.key,
+    required this.calculatedSensor,
+    this.onTap,
+  });
 
   @override
   State<ExpandedSensorCard> createState() => _ExpandedSensorCardState();
@@ -38,53 +35,29 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
     super.dispose();
   }
 
-  /// Определяет статус датчика на основе текущего значения и уставок
-  SensorStatus _getStatus() {
-    final currentValue = widget.sensor.currentValue;
-    if (currentValue == null) return SensorStatus.offline;
-
-    final minCritical = widget.sensor.uiConfigJson?.minCritical;
-    final maxCritical = widget.sensor.uiConfigJson?.maxCritical;
-
-    if ((minCritical != null && currentValue < minCritical) ||
-        (maxCritical != null && currentValue > maxCritical)) {
-      return SensorStatus.critical;
-    }
-
-    return SensorStatus.normal;
-  }
-
-  /// Возвращает цвет статуса
-  Color _getStatusColor(BuildContext context) {
-    switch (_getStatus()) {
-      case SensorStatus.normal:
-        return Colors.greenAccent;
-      case SensorStatus.warning:
-        return Colors.orange;
-      case SensorStatus.critical:
-        return Colors.redAccent;
-      case SensorStatus.offline:
-      case SensorStatus.unknown:
-        return Colors.grey;
-    }
-  }
-
-  /// Парсит цвет из hex-строки конфига
   Color _parseHexColor(String? hex) {
-    if (hex == null) return Colors.white;
+    if (hex == null) return Colors.grey;
     try {
       return Color(int.parse(hex.replaceFirst('#', '0xff')));
     } catch (_) {
-      return Colors.white;
+      return Colors.grey;
     }
+  }
+
+  String _getDataTypeText() {
+    return widget.calculatedSensor.sensor.sensorDataType == 0
+        ? 'Аналоговый'
+        : 'Цифровой';
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final statusColor = _getStatusColor(context);
-    final iconColor = _parseHexColor(widget.sensor.uiConfigJson?.color);
-    final status = _getStatus();
+    final sensor = widget.calculatedSensor.sensor;
+    final evaluation = widget.calculatedSensor.evaluation;
+    final status = evaluation.status;
+    final statusColor = status.color;
+    final iconColor = _parseHexColor(sensor.uiConfigJson?.color);
 
     final isPressed = _statesController.value.contains(WidgetState.pressed);
 
@@ -105,11 +78,9 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 12,
                 children: [
                   // Верхний ряд: иконка, название, значение
                   Row(
-                    spacing: 12,
                     children: [
                       // Иконка датчика
                       Container(
@@ -118,9 +89,16 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                           color: statusColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Icon(_getIconData(), color: iconColor, size: 32),
+                        child: Icon(
+                          SymbolsGet.get(
+                            sensor.uiConfigJson?.icon ?? 'sensors',
+                            SymbolStyle.rounded,
+                          ),
+                          color: iconColor,
+                          size: 32,
+                        ),
                       ),
-
+                      const SizedBox(width: 12),
                       // Название и значение
                       Expanded(
                         child: Column(
@@ -129,22 +107,19 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.alphabetic,
-                              spacing: 6,
                               children: [
                                 Text(
-                                  widget.sensor.currentValue?.toStringAsFixed(
-                                        1,
-                                      ) ??
-                                      '--',
+                                  evaluation.value?.toStringAsFixed(1) ?? '--',
                                   style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: statusColor,
                                   ),
                                 ),
-                                if (widget.sensor.unit != null)
+                                const SizedBox(width: 6),
+                                if (sensor.unit != null)
                                   Text(
-                                    widget.sensor.unit!,
+                                    sensor.unit!,
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: theme.colorScheme.onSurface
@@ -154,7 +129,7 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                               ],
                             ),
                             Text(
-                              widget.sensor.name ?? 'Неизвестный датчик',
+                              sensor.name ?? 'Неизвестный датчик',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,
@@ -167,30 +142,22 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
 
                       // Индикатор статуса
                       Icon(
-                        status == SensorStatus.offline
-                            ? LucideIcons.wifiOff
-                            : status == SensorStatus.normal
-                            ? LucideIcons.checkCircle
-                            : LucideIcons.alertTriangle,
-                        color: status == SensorStatus.offline
-                            ? Colors.grey
-                            : status == SensorStatus.normal
-                            ? Colors.green
-                            : Colors.red,
+                        status.icon,
+                        color: statusColor,
                         size: 24,
                       ),
                     ],
                   ),
-
+                  const SizedBox(height: 12),
                   // Нижний ряд: техническая информация
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Slug датчика
-                      if (widget.sensor.slug != null)
+                      if (sensor.slug != null)
                         Expanded(
                           child: Text(
-                            widget.sensor.slug!,
+                            sensor.slug!,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.colorScheme.onSurface.withValues(
@@ -213,9 +180,30 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                       ),
                     ],
                   ),
-
+                  const SizedBox(height: 12),
                   // Средний ряд: ThresholdBar
-                  _buildThresholdBar(context),
+                  if (sensor.uiConfigJson != null &&
+                      sensor.sensorDataType == 0) // Только для аналоговых
+                    ThresholdBar(
+                      currentValue: evaluation.value ?? 0,
+                      min: sensor.uiConfigJson!.minCritical ?? 0,
+                      max: sensor.uiConfigJson!.maxCritical ?? 100,
+                      minCritical: sensor.uiConfigJson!.minCritical ?? 0,
+                      maxCritical: sensor.uiConfigJson!.maxCritical ?? 100,
+                      maxWarning: sensor.uiConfigJson!.maxWarning ?? 80,
+                    ),
+                  if (evaluation.message != null && evaluation.message != 'Normal')
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text(
+                        evaluation.message!,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: statusColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -223,61 +211,5 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
         ),
       ),
     );
-  }
-
-  /// Возвращает ThresholdBar с уставками из uiConfig
-  Widget _buildThresholdBar(BuildContext context) {
-    final uiConfig = widget.sensor.uiConfigJson;
-    if (uiConfig == null || widget.sensor.currentValue == null) {
-      // Если нет конфига или значения, показываем простой прогресс
-      return LinearProgressIndicator(
-        value: 0.5,
-        backgroundColor: Colors.grey.shade200,
-        color: Colors.grey,
-        minHeight: 8,
-        borderRadius: BorderRadius.circular(4),
-      );
-    }
-
-    // Определяем диапазон шкалы
-    final min = uiConfig.minCritical ?? uiConfig.minWarning ?? 0.0;
-    final max = uiConfig.maxCritical ?? uiConfig.maxWarning ?? 100.0;
-
-    return ThresholdBar(
-      min: min,
-      max: max,
-      currentValue: widget.sensor.currentValue!,
-      minCritical: uiConfig.minCritical,
-      minWarning: uiConfig.minWarning,
-      maxWarning: uiConfig.maxWarning,
-      maxCritical: uiConfig.maxCritical,
-      primaryColor: _getStatusColor(context),
-    );
-  }
-
-  /// Возвращает IconData на основе имени иконки из конфига
-  IconData _getIconData() {
-    final iconName = widget.sensor.uiConfigJson?.icon;
-    if (iconName == null) return LucideIcons.gauge;
-
-    try {
-      return SymbolsGet.get(iconName, SymbolStyle.rounded);
-    } catch (_) {
-      return LucideIcons.gauge;
-    }
-  }
-
-  /// Возвращает текстовое описание типа данных
-  String _getDataTypeText() {
-    switch (widget.sensor.sensorDataType) {
-      case 0:
-        return 'Аналоговый';
-      case 1:
-        return 'Цифровой';
-      case 2:
-        return 'Дискретный';
-      default:
-        return 'Неизвестный';
-    }
   }
 }

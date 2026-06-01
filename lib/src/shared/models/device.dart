@@ -1,12 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
-import 'sensor.dart';
+import 'package:iiot_monitoring/src/shared/models/sensor.dart';
 
 part 'device.freezed.dart';
 part 'device.g.dart';
 
 @freezed
 abstract class Device with _$Device {
+  const Device._();
+
   const factory Device({
     required int id,
     String? name,

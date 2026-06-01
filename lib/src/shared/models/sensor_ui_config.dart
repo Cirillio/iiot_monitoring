@@ -5,18 +5,20 @@ part 'sensor_ui_config.g.dart';
 
 @freezed
 abstract class SensorUiConfig with _$SensorUiConfig {
+  const SensorUiConfig._();
+
   const factory SensorUiConfig({
     String? color,
     String? icon,
-    int? mainPagePosition,
-    int? graphPosition,
-    int? tablePosition,
-    int? alarmPosition,
-    int? historyPosition,
     double? minCritical,
     double? minWarning,
     double? maxWarning,
     double? maxCritical,
+    // Новые поля для DIGITAL
+    double? digitalWarning,
+    double? digitalCritical,
+    String? labelZero,
+    String? labelOne,
   }) = _SensorUiConfig;
 
   factory SensorUiConfig.fromJson(Map<String, dynamic> json) =>

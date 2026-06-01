@@ -20,6 +20,10 @@ _Sensor _$SensorFromJson(Map<String, dynamic> json) => _Sensor(
   updatedAt: json['updatedAt'] == null
       ? null
       : DateTime.parse(json['updatedAt'] as String),
+  currentValue: (json['currentValue'] as num?)?.toDouble(),
+  lastSensorUpdated: json['lastSensorUpdated'] == null
+      ? null
+      : DateTime.parse(json['lastSensorUpdated'] as String),
 );
 
 Map<String, dynamic> _$SensorToJson(_Sensor instance) => <String, dynamic>{
@@ -32,4 +36,6 @@ Map<String, dynamic> _$SensorToJson(_Sensor instance) => <String, dynamic>{
   'unit': instance.unit,
   'uiConfigJson': instance.uiConfigJson,
   'updatedAt': instance.updatedAt?.toIso8601String(),
+  'currentValue': instance.currentValue,
+  'lastSensorUpdated': instance.lastSensorUpdated?.toIso8601String(),
 };

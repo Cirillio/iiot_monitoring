@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class IiotCard extends StatelessWidget {
   final Widget child;
   final bool usePadding;
+  final BoxBorder? border;
 
   /// Базовый отступ внутри карточки. По умолчанию равен 16, как было в DeviceCard,
   /// но оставлена возможность переопределения для специфичных случаев.
@@ -16,6 +17,7 @@ class IiotCard extends StatelessWidget {
     required this.child,
     this.usePadding = true,
     this.padding = const EdgeInsets.all(16.0),
+    this.border,
   });
 
   @override
@@ -35,6 +37,7 @@ class IiotCard extends StatelessWidget {
             blurRadius: 8,
           ),
         ],
+        border: border,
         // Любые будущие изменения теней, обводок или эффектов наведения
         // должны делаться ТОЛЬКО здесь.
       ),

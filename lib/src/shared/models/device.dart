@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:iiot_monitoring/src/shared/models/sensor.dart';
+import 'package:iiot_monitoring/src/shared/models/tag.dart';
 
 part 'device.freezed.dart';
 part 'device.g.dart';
@@ -10,14 +10,19 @@ abstract class Device with _$Device {
 
   const factory Device({
     required int id,
-    String? name,
-    String? ipAddress,
-    int? port,
-    int? slaveId,
-    required bool isActive,
+    @Default("Unnamed Device") String name,
+    required int connectionId,
+    @Default("127.0.0.1") String ipAddress,
+    required int port,
+    required int slaveId,
+    @Default(true) bool useGroupPolling,
+    @Default(120) int maxRegisterSpan,
+    @Default(false) bool isActive,
+    @Default(false) bool isOnline,
+    DateTime? lastSeen,
     DateTime? createdAt,
-    @Default([]) List<Sensor> sensors,
-    @Default(0) int totalSensors,
+    @Default([]) List<Tag> tags,
+    @Default(0) int totalTags,
   }) = _Device;
 
   factory Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);

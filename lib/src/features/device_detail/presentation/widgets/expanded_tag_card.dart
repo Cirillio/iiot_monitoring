@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
-import 'package:iiot_monitoring/src/core/monitoring/extensions/sensor_status_ui.dart';
+import 'package:iiot_monitoring/src/shared/models/enums.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/calculated_tag.dart';
+import 'package:iiot_monitoring/src/core/monitoring/extensions/tag_status_ui.dart';
 import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import 'package:material_symbols_icons/get.dart';
 import 'threshold_bar.dart';
 
-class ExpandedSensorCard extends StatefulWidget {
-  final CalculatedSensor calculatedSensor;
+class ExpandedTagCard extends StatefulWidget {
+  final CalculatedTag calculatedTag;
   final VoidCallback? onTap;
 
-  const ExpandedSensorCard({
+  const ExpandedTagCard({
     super.key,
-    required this.calculatedSensor,
+    required this.calculatedTag,
     this.onTap,
   });
 
   @override
-  State<ExpandedSensorCard> createState() => _ExpandedSensorCardState();
+  State<ExpandedTagCard> createState() => _ExpandedTagCardState();
 }
 
-class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
+class _ExpandedTagCardState extends State<ExpandedTagCard> {
   late final WidgetStatesController _statesController;
 
   @override
@@ -45,7 +46,7 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
   }
 
   String _getDataTypeText() {
-    return widget.calculatedSensor.sensor.sensorDataType == 0
+    return widget.calculatedTag.tag.dataType == TagDataType.analogRaw
         ? 'Аналоговый'
         : 'Цифровой';
   }
@@ -53,11 +54,11 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final sensor = widget.calculatedSensor.sensor;
-    final evaluation = widget.calculatedSensor.evaluation;
+    final tag = widget.calculatedTag.tag;
+    final evaluation = widget.calculatedTag.evaluation;
     final status = evaluation.status;
     final statusColor = status.color;
-    final iconColor = _parseHexColor(sensor.uiConfigJson?.color);
+    final iconColor = _parseHexColor(tag.uiConfigJson?.color);
 
     final isPressed = _statesController.value.contains(WidgetState.pressed);
 
@@ -91,7 +92,7 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                         ),
                         child: Icon(
                           SymbolsGet.get(
-                            sensor.uiConfigJson?.icon ?? 'sensors',
+                            tag.uiConfigJson?.icon ?? 'tags',
                             SymbolStyle.rounded,
                           ),
                           color: iconColor,
@@ -117,9 +118,9 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                                   ),
                                 ),
                                 const SizedBox(width: 6),
-                                if (sensor.unit != null)
+                                if (tag.unit != null)
                                   Text(
-                                    sensor.unit!,
+                                    tag.unit!,
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: theme.colorScheme.onSurface
@@ -129,7 +130,7 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                               ],
                             ),
                             Text(
-                              sensor.name ?? 'Неизвестный датчик',
+                              tag.name ?? 'Неизвестный датчик',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,
@@ -154,10 +155,10 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Slug датчика
-                      if (sensor.slug != null)
+                      if (tag.slug != null)
                         Expanded(
                           child: Text(
-                            sensor.slug!,
+                            tag.slug!,
                             style: TextStyle(
                               fontSize: 11,
                               color: theme.colorScheme.onSurface.withValues(
@@ -182,15 +183,15 @@ class _ExpandedSensorCardState extends State<ExpandedSensorCard> {
                   ),
                   const SizedBox(height: 12),
                   // Средний ряд: ThresholdBar
-                  if (sensor.uiConfigJson != null &&
-                      sensor.sensorDataType == 0) // Только для аналоговых
+                  if (tag.uiConfigJson != null &&
+                      tag.dataType == TagDataType.analogRaw) // Только для аналоговых
                     ThresholdBar(
                       currentValue: evaluation.value ?? 0,
-                      min: sensor.uiConfigJson!.minCritical ?? 0,
-                      max: sensor.uiConfigJson!.maxCritical ?? 100,
-                      minCritical: sensor.uiConfigJson!.minCritical ?? 0,
-                      maxCritical: sensor.uiConfigJson!.maxCritical ?? 100,
-                      maxWarning: sensor.uiConfigJson!.maxWarning ?? 80,
+                      min: tag.uiConfigJson!.minCritical ?? 0,
+                      max: tag.uiConfigJson!.maxCritical ?? 100,
+                      minCritical: tag.uiConfigJson!.minCritical ?? 0,
+                      maxCritical: tag.uiConfigJson!.maxCritical ?? 100,
+                      maxWarning: tag.uiConfigJson!.maxWarning ?? 80,
                     ),
                   if (evaluation.message != null && evaluation.message != 'Normal')
                     Padding(

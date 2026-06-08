@@ -9,11 +9,10 @@ part of 'api_client.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(baseUrl)
+@ProviderFor(BaseUrl)
 final baseUrlProvider = BaseUrlProvider._();
 
-final class BaseUrlProvider extends $FunctionalProvider<String, String, String>
-    with $Provider<String> {
+final class BaseUrlProvider extends $NotifierProvider<BaseUrl, String> {
   BaseUrlProvider._()
     : super(
         from: null,
@@ -30,13 +29,7 @@ final class BaseUrlProvider extends $FunctionalProvider<String, String, String>
 
   @$internal
   @override
-  $ProviderElement<String> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  String create(Ref ref) {
-    return baseUrl(ref);
-  }
+  BaseUrl create() => BaseUrl();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(String value) {
@@ -47,7 +40,25 @@ final class BaseUrlProvider extends $FunctionalProvider<String, String, String>
   }
 }
 
-String _$baseUrlHash() => r'9706a3fb89af0cd60c697dd32c118c93ba508ef5';
+String _$baseUrlHash() => r'a373a078c9a27d6aa731196761011648ad14b1d7';
+
+abstract class _$BaseUrl extends $Notifier<String> {
+  String build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<String, String>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String, String>,
+              String,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
 
 @ProviderFor(dio)
 final dioProvider = DioProvider._();

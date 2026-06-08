@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Device {
 
- int get id; String? get name; String? get ipAddress; int? get port; int? get slaveId; bool get isActive; DateTime? get createdAt; List<Sensor> get sensors; int get totalSensors;
+ int get id; String get name; int get connectionId; String get ipAddress; int get port; int get slaveId; bool get useGroupPolling; int get maxRegisterSpan; bool get isActive; bool get isOnline; DateTime? get lastSeen; DateTime? get createdAt; List<Tag> get tags; int get totalTags;
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DeviceCopyWith<Device> get copyWith => _$DeviceCopyWithImpl<Device>(this as Dev
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.slaveId, slaveId) || other.slaveId == slaveId)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.sensors, sensors)&&(identical(other.totalSensors, totalSensors) || other.totalSensors == totalSensors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.connectionId, connectionId) || other.connectionId == connectionId)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.slaveId, slaveId) || other.slaveId == slaveId)&&(identical(other.useGroupPolling, useGroupPolling) || other.useGroupPolling == useGroupPolling)&&(identical(other.maxRegisterSpan, maxRegisterSpan) || other.maxRegisterSpan == maxRegisterSpan)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.tags, tags)&&(identical(other.totalTags, totalTags) || other.totalTags == totalTags));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,ipAddress,port,slaveId,isActive,createdAt,const DeepCollectionEquality().hash(sensors),totalSensors);
+int get hashCode => Object.hash(runtimeType,id,name,connectionId,ipAddress,port,slaveId,useGroupPolling,maxRegisterSpan,isActive,isOnline,lastSeen,createdAt,const DeepCollectionEquality().hash(tags),totalTags);
 
 @override
 String toString() {
-  return 'Device(id: $id, name: $name, ipAddress: $ipAddress, port: $port, slaveId: $slaveId, isActive: $isActive, createdAt: $createdAt, sensors: $sensors, totalSensors: $totalSensors)';
+  return 'Device(id: $id, name: $name, connectionId: $connectionId, ipAddress: $ipAddress, port: $port, slaveId: $slaveId, useGroupPolling: $useGroupPolling, maxRegisterSpan: $maxRegisterSpan, isActive: $isActive, isOnline: $isOnline, lastSeen: $lastSeen, createdAt: $createdAt, tags: $tags, totalTags: $totalTags)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DeviceCopyWith<$Res>  {
   factory $DeviceCopyWith(Device value, $Res Function(Device) _then) = _$DeviceCopyWithImpl;
 @useResult
 $Res call({
- int id, String? name, String? ipAddress, int? port, int? slaveId, bool isActive, DateTime? createdAt, List<Sensor> sensors, int totalSensors
+ int id, String name, int connectionId, String ipAddress, int port, int slaveId, bool useGroupPolling, int maxRegisterSpan, bool isActive, bool isOnline, DateTime? lastSeen, DateTime? createdAt, List<Tag> tags, int totalTags
 });
 
 
@@ -65,17 +65,22 @@ class _$DeviceCopyWithImpl<$Res>
 
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = freezed,Object? ipAddress = freezed,Object? port = freezed,Object? slaveId = freezed,Object? isActive = null,Object? createdAt = freezed,Object? sensors = null,Object? totalSensors = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? connectionId = null,Object? ipAddress = null,Object? port = null,Object? slaveId = null,Object? useGroupPolling = null,Object? maxRegisterSpan = null,Object? isActive = null,Object? isOnline = null,Object? lastSeen = freezed,Object? createdAt = freezed,Object? tags = null,Object? totalTags = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String?,ipAddress: freezed == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
-as String?,port: freezed == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
-as int?,slaveId: freezed == slaveId ? _self.slaveId : slaveId // ignore: cast_nullable_to_non_nullable
-as int?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,sensors: null == sensors ? _self.sensors : sensors // ignore: cast_nullable_to_non_nullable
-as List<Sensor>,totalSensors: null == totalSensors ? _self.totalSensors : totalSensors // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,connectionId: null == connectionId ? _self.connectionId : connectionId // ignore: cast_nullable_to_non_nullable
+as int,ipAddress: null == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
+as String,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int,slaveId: null == slaveId ? _self.slaveId : slaveId // ignore: cast_nullable_to_non_nullable
+as int,useGroupPolling: null == useGroupPolling ? _self.useGroupPolling : useGroupPolling // ignore: cast_nullable_to_non_nullable
+as bool,maxRegisterSpan: null == maxRegisterSpan ? _self.maxRegisterSpan : maxRegisterSpan // ignore: cast_nullable_to_non_nullable
+as int,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,isOnline: null == isOnline ? _self.isOnline : isOnline // ignore: cast_nullable_to_non_nullable
+as bool,lastSeen: freezed == lastSeen ? _self.lastSeen : lastSeen // ignore: cast_nullable_to_non_nullable
+as DateTime?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,tags: null == tags ? _self.tags : tags // ignore: cast_nullable_to_non_nullable
+as List<Tag>,totalTags: null == totalTags ? _self.totalTags : totalTags // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }
@@ -161,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String? name,  String? ipAddress,  int? port,  int? slaveId,  bool isActive,  DateTime? createdAt,  List<Sensor> sensors,  int totalSensors)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  int connectionId,  String ipAddress,  int port,  int slaveId,  bool useGroupPolling,  int maxRegisterSpan,  bool isActive,  bool isOnline,  DateTime? lastSeen,  DateTime? createdAt,  List<Tag> tags,  int totalTags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Device() when $default != null:
-return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_that.isActive,_that.createdAt,_that.sensors,_that.totalSensors);case _:
+return $default(_that.id,_that.name,_that.connectionId,_that.ipAddress,_that.port,_that.slaveId,_that.useGroupPolling,_that.maxRegisterSpan,_that.isActive,_that.isOnline,_that.lastSeen,_that.createdAt,_that.tags,_that.totalTags);case _:
   return orElse();
 
 }
@@ -182,10 +187,10 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String? name,  String? ipAddress,  int? port,  int? slaveId,  bool isActive,  DateTime? createdAt,  List<Sensor> sensors,  int totalSensors)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  int connectionId,  String ipAddress,  int port,  int slaveId,  bool useGroupPolling,  int maxRegisterSpan,  bool isActive,  bool isOnline,  DateTime? lastSeen,  DateTime? createdAt,  List<Tag> tags,  int totalTags)  $default,) {final _that = this;
 switch (_that) {
 case _Device():
-return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_that.isActive,_that.createdAt,_that.sensors,_that.totalSensors);case _:
+return $default(_that.id,_that.name,_that.connectionId,_that.ipAddress,_that.port,_that.slaveId,_that.useGroupPolling,_that.maxRegisterSpan,_that.isActive,_that.isOnline,_that.lastSeen,_that.createdAt,_that.tags,_that.totalTags);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +207,10 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String? name,  String? ipAddress,  int? port,  int? slaveId,  bool isActive,  DateTime? createdAt,  List<Sensor> sensors,  int totalSensors)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  int connectionId,  String ipAddress,  int port,  int slaveId,  bool useGroupPolling,  int maxRegisterSpan,  bool isActive,  bool isOnline,  DateTime? lastSeen,  DateTime? createdAt,  List<Tag> tags,  int totalTags)?  $default,) {final _that = this;
 switch (_that) {
 case _Device() when $default != null:
-return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_that.isActive,_that.createdAt,_that.sensors,_that.totalSensors);case _:
+return $default(_that.id,_that.name,_that.connectionId,_that.ipAddress,_that.port,_that.slaveId,_that.useGroupPolling,_that.maxRegisterSpan,_that.isActive,_that.isOnline,_that.lastSeen,_that.createdAt,_that.tags,_that.totalTags);case _:
   return null;
 
 }
@@ -217,24 +222,29 @@ return $default(_that.id,_that.name,_that.ipAddress,_that.port,_that.slaveId,_th
 @JsonSerializable()
 
 class _Device extends Device {
-  const _Device({required this.id, this.name, this.ipAddress, this.port, this.slaveId, required this.isActive, this.createdAt, final  List<Sensor> sensors = const [], this.totalSensors = 0}): _sensors = sensors,super._();
+  const _Device({required this.id, this.name = "Unnamed Device", required this.connectionId, this.ipAddress = "127.0.0.1", required this.port, required this.slaveId, this.useGroupPolling = true, this.maxRegisterSpan = 120, this.isActive = false, this.isOnline = false, this.lastSeen, this.createdAt, final  List<Tag> tags = const [], this.totalTags = 0}): _tags = tags,super._();
   factory _Device.fromJson(Map<String, dynamic> json) => _$DeviceFromJson(json);
 
 @override final  int id;
-@override final  String? name;
-@override final  String? ipAddress;
-@override final  int? port;
-@override final  int? slaveId;
-@override final  bool isActive;
+@override@JsonKey() final  String name;
+@override final  int connectionId;
+@override@JsonKey() final  String ipAddress;
+@override final  int port;
+@override final  int slaveId;
+@override@JsonKey() final  bool useGroupPolling;
+@override@JsonKey() final  int maxRegisterSpan;
+@override@JsonKey() final  bool isActive;
+@override@JsonKey() final  bool isOnline;
+@override final  DateTime? lastSeen;
 @override final  DateTime? createdAt;
- final  List<Sensor> _sensors;
-@override@JsonKey() List<Sensor> get sensors {
-  if (_sensors is EqualUnmodifiableListView) return _sensors;
+ final  List<Tag> _tags;
+@override@JsonKey() List<Tag> get tags {
+  if (_tags is EqualUnmodifiableListView) return _tags;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_sensors);
+  return EqualUnmodifiableListView(_tags);
 }
 
-@override@JsonKey() final  int totalSensors;
+@override@JsonKey() final  int totalTags;
 
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +259,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.slaveId, slaveId) || other.slaveId == slaveId)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._sensors, _sensors)&&(identical(other.totalSensors, totalSensors) || other.totalSensors == totalSensors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Device&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.connectionId, connectionId) || other.connectionId == connectionId)&&(identical(other.ipAddress, ipAddress) || other.ipAddress == ipAddress)&&(identical(other.port, port) || other.port == port)&&(identical(other.slaveId, slaveId) || other.slaveId == slaveId)&&(identical(other.useGroupPolling, useGroupPolling) || other.useGroupPolling == useGroupPolling)&&(identical(other.maxRegisterSpan, maxRegisterSpan) || other.maxRegisterSpan == maxRegisterSpan)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._tags, _tags)&&(identical(other.totalTags, totalTags) || other.totalTags == totalTags));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,ipAddress,port,slaveId,isActive,createdAt,const DeepCollectionEquality().hash(_sensors),totalSensors);
+int get hashCode => Object.hash(runtimeType,id,name,connectionId,ipAddress,port,slaveId,useGroupPolling,maxRegisterSpan,isActive,isOnline,lastSeen,createdAt,const DeepCollectionEquality().hash(_tags),totalTags);
 
 @override
 String toString() {
-  return 'Device(id: $id, name: $name, ipAddress: $ipAddress, port: $port, slaveId: $slaveId, isActive: $isActive, createdAt: $createdAt, sensors: $sensors, totalSensors: $totalSensors)';
+  return 'Device(id: $id, name: $name, connectionId: $connectionId, ipAddress: $ipAddress, port: $port, slaveId: $slaveId, useGroupPolling: $useGroupPolling, maxRegisterSpan: $maxRegisterSpan, isActive: $isActive, isOnline: $isOnline, lastSeen: $lastSeen, createdAt: $createdAt, tags: $tags, totalTags: $totalTags)';
 }
 
 
@@ -269,7 +279,7 @@ abstract mixin class _$DeviceCopyWith<$Res> implements $DeviceCopyWith<$Res> {
   factory _$DeviceCopyWith(_Device value, $Res Function(_Device) _then) = __$DeviceCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String? name, String? ipAddress, int? port, int? slaveId, bool isActive, DateTime? createdAt, List<Sensor> sensors, int totalSensors
+ int id, String name, int connectionId, String ipAddress, int port, int slaveId, bool useGroupPolling, int maxRegisterSpan, bool isActive, bool isOnline, DateTime? lastSeen, DateTime? createdAt, List<Tag> tags, int totalTags
 });
 
 
@@ -286,17 +296,22 @@ class __$DeviceCopyWithImpl<$Res>
 
 /// Create a copy of Device
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = freezed,Object? ipAddress = freezed,Object? port = freezed,Object? slaveId = freezed,Object? isActive = null,Object? createdAt = freezed,Object? sensors = null,Object? totalSensors = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? connectionId = null,Object? ipAddress = null,Object? port = null,Object? slaveId = null,Object? useGroupPolling = null,Object? maxRegisterSpan = null,Object? isActive = null,Object? isOnline = null,Object? lastSeen = freezed,Object? createdAt = freezed,Object? tags = null,Object? totalTags = null,}) {
   return _then(_Device(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String?,ipAddress: freezed == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
-as String?,port: freezed == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
-as int?,slaveId: freezed == slaveId ? _self.slaveId : slaveId // ignore: cast_nullable_to_non_nullable
-as int?,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
-as bool,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime?,sensors: null == sensors ? _self._sensors : sensors // ignore: cast_nullable_to_non_nullable
-as List<Sensor>,totalSensors: null == totalSensors ? _self.totalSensors : totalSensors // ignore: cast_nullable_to_non_nullable
+as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String,connectionId: null == connectionId ? _self.connectionId : connectionId // ignore: cast_nullable_to_non_nullable
+as int,ipAddress: null == ipAddress ? _self.ipAddress : ipAddress // ignore: cast_nullable_to_non_nullable
+as String,port: null == port ? _self.port : port // ignore: cast_nullable_to_non_nullable
+as int,slaveId: null == slaveId ? _self.slaveId : slaveId // ignore: cast_nullable_to_non_nullable
+as int,useGroupPolling: null == useGroupPolling ? _self.useGroupPolling : useGroupPolling // ignore: cast_nullable_to_non_nullable
+as bool,maxRegisterSpan: null == maxRegisterSpan ? _self.maxRegisterSpan : maxRegisterSpan // ignore: cast_nullable_to_non_nullable
+as int,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
+as bool,isOnline: null == isOnline ? _self.isOnline : isOnline // ignore: cast_nullable_to_non_nullable
+as bool,lastSeen: freezed == lastSeen ? _self.lastSeen : lastSeen // ignore: cast_nullable_to_non_nullable
+as DateTime?,createdAt: freezed == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,tags: null == tags ? _self._tags : tags // ignore: cast_nullable_to_non_nullable
+as List<Tag>,totalTags: null == totalTags ? _self.totalTags : totalTags // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

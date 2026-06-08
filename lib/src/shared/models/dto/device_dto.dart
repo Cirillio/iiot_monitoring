@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'sensor_dto.dart';
+import 'tag_dto.dart';
 
 part 'device_dto.freezed.dart';
 part 'device_dto.g.dart';
@@ -10,16 +10,20 @@ abstract class DeviceDto with _$DeviceDto {
 
   const factory DeviceDto({
     required int id,
-    String? name,
-    String? ipAddress,
-    int? port,
-    int? slaveId,
-    required bool isActive,
+    @Default("Unnamed Device") String name,
+    required int connectionId,
+    @Default("127.0.0.1") String ipAddress,
+    required int port,
+    required int slaveId,
+    @Default(true) bool useGroupPolling,
+    @Default(120) int maxRegisterSpan,
+    @Default(false) bool isActive,
+    @Default(false) bool isOnline,
+    DateTime? lastSeen,
     DateTime? createdAt,
-    @Default([]) List<SensorDto> sensors,
-    @Default(0) int totalSensors,
+    @Default([]) List<TagDto> tags,
+    @Default(0) int totalTags,
   }) = _DeviceDto;
 
-  factory DeviceDto.fromJson(Map<String, dynamic> json) =>
-      _$DeviceDtoFromJson(json);
+  factory DeviceDto.fromJson(Map<String, dynamic> json) => _$DeviceDtoFromJson(json);
 }

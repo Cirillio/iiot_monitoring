@@ -1,37 +1,38 @@
-import 'package:iiot_monitoring/src/core/monitoring/models/sensor_evaluation.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/sensor_status.dart';
-import 'package:iiot_monitoring/src/shared/models/sensor.dart';
-import 'package:iiot_monitoring/src/shared/models/sensor_ui_config.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/tag_evaluation.dart';
+import 'package:iiot_monitoring/src/shared/models/enums.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/tag_status.dart';
+import 'package:iiot_monitoring/src/shared/models/tag.dart';
+import 'package:iiot_monitoring/src/shared/models/tag_ui_config.dart';
 
-class SensorEvaluator {
-  static SensorEvaluation evaluate({
-    required Sensor sensor,
+class TagEvaluator {
+  static TagEvaluation evaluate({
+    required Tag tag,
     required double value,
-    SensorEvaluation? previousEvaluation,
+    TagEvaluation? previousEvaluation,
   }) {
-    final config = sensor.uiConfigJson;
+    final config = tag.uiConfigJson;
 
     if (config == null) {
-      return SensorEvaluation(
-        status: SensorStatus.noConfig,
+      return TagEvaluation(
+        status: TagStatus.noConfig,
         value: value,
         message: 'No configuration',
       );
     }
 
-    final isDigital = sensor.sensorDataType == 1;
-    final prevStatus = previousEvaluation?.status ?? SensorStatus.idle;
-    SensorStatus newStatus = SensorStatus.normal;
+    final isDigital = tag.dataType == TagDataType.digital;
+    final prevStatus = previousEvaluation?.status ?? TagStatus.idle;
+    TagStatus newStatus = TagStatus.normal;
 
     if (isDigital) {
       // Логика для DIGITAL датчиков
       if (config.digitalCritical != null && value == config.digitalCritical) {
-        newStatus = SensorStatus.critical;
+        newStatus = TagStatus.critical;
       } else if (config.digitalWarning != null &&
           value == config.digitalWarning) {
-        newStatus = SensorStatus.warning;
+        newStatus = TagStatus.warning;
       } else {
-        newStatus = SensorStatus.normal;
+        newStatus = TagStatus.normal;
       }
     } else {
       // Логика для ANALOG датчиков
@@ -40,8 +41,8 @@ class SensorEvaluator {
       final minCritical = config.minCritical;
 
       if (maxCritical == null || maxWarning == null || minCritical == null) {
-        return SensorEvaluation(
-          status: SensorStatus.noConfig,
+        return TagEvaluation(
+          status: TagStatus.noConfig,
           value: value,
           message: 'Incomplete thresholds',
         );
@@ -52,33 +53,33 @@ class SensorEvaluator {
       final noise = range * 0.02;
 
       if (value >= maxCritical) {
-        newStatus = SensorStatus.critical;
-      } else if (prevStatus == SensorStatus.critical &&
+        newStatus = TagStatus.critical;
+      } else if (prevStatus == TagStatus.critical &&
           value >= maxCritical - noise) {
-        newStatus = SensorStatus.critical;
+        newStatus = TagStatus.critical;
       } else if (value >= maxWarning) {
-        newStatus = SensorStatus.warning;
-      } else if (prevStatus == SensorStatus.warning &&
+        newStatus = TagStatus.warning;
+      } else if (prevStatus == TagStatus.warning &&
           value >= maxWarning - noise) {
-        newStatus = SensorStatus.warning;
+        newStatus = TagStatus.warning;
       } else {
-        newStatus = SensorStatus.normal;
+        newStatus = TagStatus.normal;
       }
     }
 
     DateTime? alarmStartedAt = previousEvaluation?.alarmStartedAt;
-    if (newStatus == SensorStatus.warning || newStatus == SensorStatus.critical) {
+    if (newStatus == TagStatus.warning || newStatus == TagStatus.critical) {
       // Если вошли в аларм из нормального состояния
-      if (prevStatus == SensorStatus.normal || prevStatus == SensorStatus.idle) {
+      if (prevStatus == TagStatus.normal || prevStatus == TagStatus.idle) {
         alarmStartedAt = DateTime.now();
       }
-    } else if (newStatus == SensorStatus.normal) {
+    } else if (newStatus == TagStatus.normal) {
       alarmStartedAt = null;
     }
 
-    String message = _getMessageForStatus(newStatus, value, sensor, config);
+    String message = _getMessageForStatus(newStatus, value, tag, config);
 
-    return SensorEvaluation(
+    return TagEvaluation(
       status: newStatus,
       value: value,
       alarmStartedAt: alarmStartedAt,
@@ -87,17 +88,17 @@ class SensorEvaluator {
   }
 
   static String _getMessageForStatus(
-    SensorStatus status,
+    TagStatus status,
     double value,
-    Sensor sensor,
-    SensorUiConfig config,
+    Tag tag,
+    TagUiConfig config,
   ) {
-    if (status == SensorStatus.normal) return 'Normal';
+    if (status == TagStatus.normal) return 'Normal';
 
-    final unit = sensor.unit ?? '';
+    final unit = tag.unit;
     String valueStr;
 
-    if (sensor.sensorDataType == 1) {
+    if (tag.dataType == TagDataType.digital) {
       if (value == 0 && config.labelZero != null) {
         valueStr = config.labelZero!;
       } else if (value == 1 && config.labelOne != null) {
@@ -110,9 +111,9 @@ class SensorEvaluator {
     }
 
     switch (status) {
-      case SensorStatus.critical:
+      case TagStatus.critical:
         return 'Critical: $valueStr';
-      case SensorStatus.warning:
+      case TagStatus.warning:
         return 'Warning: $valueStr';
       default:
         return '';

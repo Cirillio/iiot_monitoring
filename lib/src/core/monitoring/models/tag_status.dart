@@ -1,4 +1,4 @@
-enum SensorStatus {
+enum TagStatus {
   idle,
   normal,
   warning,

@@ -1,54 +1,54 @@
 import 'package:flutter/material.dart';
-import '../models/sensor_status.dart';
+import '../models/tag_status.dart';
 
-extension SensorStatusUI on SensorStatus {
+extension TagStatusUI on TagStatus {
   Color get color {
     switch (this) {
-      case SensorStatus.critical:
+      case TagStatus.critical:
         return Colors.redAccent;
-      case SensorStatus.warning:
+      case TagStatus.warning:
         return Colors.orangeAccent;
-      case SensorStatus.normal:
+      case TagStatus.normal:
         return Colors.greenAccent;
-      case SensorStatus.offline:
+      case TagStatus.offline:
         return Colors.grey;
-      case SensorStatus.noConfig:
+      case TagStatus.noConfig:
         return Colors.blueGrey;
-      case SensorStatus.idle:
-        return Colors.grey.withOpacity(0.5);
+      case TagStatus.idle:
+        return Colors.grey.withValues(alpha: 0.5);
     }
   }
 
   IconData get icon {
     switch (this) {
-      case SensorStatus.critical:
+      case TagStatus.critical:
         return Icons.error_outline;
-      case SensorStatus.warning:
+      case TagStatus.warning:
         return Icons.warning_amber_rounded;
-      case SensorStatus.normal:
+      case TagStatus.normal:
         return Icons.check_circle_outline;
-      case SensorStatus.offline:
+      case TagStatus.offline:
         return Icons.signal_wifi_off;
-      case SensorStatus.noConfig:
+      case TagStatus.noConfig:
         return Icons.settings_outlined;
-      case SensorStatus.idle:
+      case TagStatus.idle:
         return Icons.hourglass_empty;
     }
   }
 
   String get label {
     switch (this) {
-      case SensorStatus.critical:
+      case TagStatus.critical:
         return 'CRITICAL';
-      case SensorStatus.warning:
+      case TagStatus.warning:
         return 'WARNING';
-      case SensorStatus.normal:
+      case TagStatus.normal:
         return 'NORMAL';
-      case SensorStatus.offline:
+      case TagStatus.offline:
         return 'OFFLINE';
-      case SensorStatus.noConfig:
+      case TagStatus.noConfig:
         return 'NO CONFIG';
-      case SensorStatus.idle:
+      case TagStatus.idle:
         return 'IDLE';
     }
   }

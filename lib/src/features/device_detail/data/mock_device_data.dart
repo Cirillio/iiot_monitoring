@@ -1,6 +1,7 @@
 import 'package:iiot_monitoring/src/shared/models/device.dart';
-import 'package:iiot_monitoring/src/shared/models/sensor.dart';
-import 'package:iiot_monitoring/src/shared/models/sensor_ui_config.dart';
+import 'package:iiot_monitoring/src/shared/models/tag.dart';
+import 'package:iiot_monitoring/src/shared/models/tag_ui_config.dart';
+import 'package:iiot_monitoring/src/shared/models/enums.dart';
 
 /// Моковые данные для этапа макетирования страницы устройства.
 /// Данные реалистичные: есть сенсоры с нормальными значениями и один критический.
@@ -8,7 +9,7 @@ class MockDeviceData {
   MockDeviceData._();
 
   /// Конфигурация для датчика температуры (нормальный режим)
-  static const _tempNormalConfig = SensorUiConfig(
+  static const _tempNormalConfig = TagUiConfig(
     color: '#00FF00',
     icon: 'thermometer',
     minCritical: 10.0,
@@ -18,7 +19,7 @@ class MockDeviceData {
   );
 
   /// Конфигурация для датчика давления (нормальный режим)
-  static const _pressureNormalConfig = SensorUiConfig(
+  static const _pressureNormalConfig = TagUiConfig(
     color: '#0000FF',
     icon: 'gauge',
     minCritical: 0.5,
@@ -28,7 +29,7 @@ class MockDeviceData {
   );
 
   /// Конфигурация для датчика влажности (нормальный режим)
-  static const _humidityNormalConfig = SensorUiConfig(
+  static const _humidityNormalConfig = TagUiConfig(
     color: '#00FFFF',
     icon: 'droplet',
     minCritical: 30.0,
@@ -38,7 +39,7 @@ class MockDeviceData {
   );
 
   /// Конфигурация для датчика напряжения (КРИТИЧЕСКИЙ - превышает maxCritical)
-  static const _voltageCriticalConfig = SensorUiConfig(
+  static const _voltageCriticalConfig = TagUiConfig(
     color: '#FFFF00',
     icon: 'zap',
     minCritical: 200.0,
@@ -48,59 +49,59 @@ class MockDeviceData {
   );
 
   /// Датчик температуры - норма
-  static final temperatureSensor = Sensor(
-    sensorId: 1,
+  static final temperatureTag = Tag(
+    tagId: 1,
     deviceId: 1,
     portNumber: 1,
     name: 'Температура двигателя',
     slug: 'engine_temp',
-    sensorDataType: 0, // Аналоговый
+    dataType: TagDataType.analogRaw, // Аналоговый
     unit: '°C',
     uiConfigJson: _tempNormalConfig,
     currentValue: 28.5,
-    lastSensorUpdated: DateTime(2026, 2, 28, 10, 30, 0),
+    lastTagUpdated: DateTime(2026, 2, 28, 10, 30, 0),
   );
 
   /// Датчик давления - норма
-  static final pressureSensor = Sensor(
-    sensorId: 2,
+  static final pressureTag = Tag(
+    tagId: 2,
     deviceId: 1,
     portNumber: 2,
     name: 'Давление в системе',
     slug: 'system_pressure',
-    sensorDataType: 0, // Аналоговый
+    dataType: TagDataType.analogRaw, // Аналоговый
     unit: 'бар',
     uiConfigJson: _pressureNormalConfig,
     currentValue: 4.2,
-    lastSensorUpdated: DateTime(2026, 2, 28, 10, 30, 5),
+    lastTagUpdated: DateTime(2026, 2, 28, 10, 30, 5),
   );
 
   /// Датчик влажности - норма
-  static final humiditySensor = Sensor(
-    sensorId: 3,
+  static final humidityTag = Tag(
+    tagId: 3,
     deviceId: 1,
     portNumber: 3,
     name: 'Влажность воздуха',
     slug: 'air_humidity',
-    sensorDataType: 0, // Аналоговый
+    dataType: TagDataType.analogRaw, // Аналоговый
     unit: '%',
     uiConfigJson: _humidityNormalConfig,
     currentValue: 55.0,
-    lastSensorUpdated: DateTime(2026, 2, 28, 10, 30, 10),
+    lastTagUpdated: DateTime(2026, 2, 28, 10, 30, 10),
   );
 
   /// Датчик напряжения - КРИТИЧЕСКИЙ (превышает maxCritical 240В)
-  static final voltageCriticalSensor = Sensor(
-    sensorId: 4,
+  static final voltageCriticalTag = Tag(
+    tagId: 4,
     deviceId: 1,
     portNumber: 4,
     name: 'Напряжение сети',
     slug: 'mains_voltage',
-    sensorDataType: 0, // Аналоговый
+    dataType: TagDataType.analogRaw, // Аналоговый
     unit: 'В',
     uiConfigJson: _voltageCriticalConfig,
     currentValue: 255.0, // Критическое превышение!
-    lastSensorUpdated: DateTime(2026, 2, 28, 10, 30, 15),
+    lastTagUpdated: DateTime(2026, 2, 28, 10, 30, 15),
   );
 
   /// Основное моковое устройство со всеми сенсорами
@@ -111,14 +112,16 @@ class MockDeviceData {
     port: 502,
     slaveId: 1,
     isActive: true,
+      connectionId: 1,
+      isOnline: true,
     createdAt: DateTime(2026, 1, 1),
-    sensors: [
-      temperatureSensor,
-      pressureSensor,
-      humiditySensor,
-      voltageCriticalSensor,
+    tags: [
+      temperatureTag,
+      pressureTag,
+      humidityTag,
+      voltageCriticalTag,
     ],
-    totalSensors: 4,
+    totalTags: 4,
   );
 
   /// Второе моковое устройство (все сенсоры в норме)
@@ -129,43 +132,45 @@ class MockDeviceData {
     port: 502,
     slaveId: 2,
     isActive: true,
+      connectionId: 1,
+      isOnline: true,
     createdAt: DateTime(2026, 1, 15),
-    sensors: [
-      Sensor(
-        sensorId: 5,
+    tags: [
+      Tag(
+        tagId: 5,
         deviceId: 2,
         portNumber: 1,
         name: 'Температура шкафа',
         slug: 'cabinet_temp',
-        sensorDataType: 0,
+        dataType: TagDataType.analogRaw,
         unit: '°C',
-        uiConfigJson: SensorUiConfig(
+        uiConfigJson: TagUiConfig(
           color: '#00FF00',
           icon: 'thermometer',
           minCritical: 10.0,
           maxCritical: 40.0,
         ),
         currentValue: 22.0,
-        lastSensorUpdated: DateTime(2026, 2, 28, 10, 25, 0),
+        lastTagUpdated: DateTime(2026, 2, 28, 10, 25, 0),
       ),
-      Sensor(
-        sensorId: 6,
+      Tag(
+        tagId: 6,
         deviceId: 2,
         portNumber: 2,
         name: 'Ток фазы A',
         slug: 'phase_a_current',
-        sensorDataType: 0,
+        dataType: TagDataType.analogRaw,
         unit: 'А',
-        uiConfigJson: SensorUiConfig(
+        uiConfigJson: TagUiConfig(
           color: '#FFA500',
           icon: 'zap',
           minCritical: 0.0,
           maxCritical: 100.0,
         ),
         currentValue: 45.5,
-        lastSensorUpdated: DateTime(2026, 2, 28, 10, 25, 5),
+        lastTagUpdated: DateTime(2026, 2, 28, 10, 25, 5),
       ),
     ],
-    totalSensors: 2,
+    totalTags: 2,
   );
 }

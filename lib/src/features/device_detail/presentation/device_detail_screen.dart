@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:iiot_monitoring/src/shared/models/enums.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_device.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/sensor_status.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/calculated_tag.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/tag_status.dart';
 import 'package:iiot_monitoring/src/features/device_detail/presentation/controllers/device_detail_controller.dart';
 import 'package:iiot_monitoring/src/features/device_detail/presentation/widgets/device_detail_header.dart';
 import 'package:iiot_monitoring/src/features/device_detail/presentation/widgets/device_summary_panel.dart';
-import 'package:iiot_monitoring/src/features/device_detail/presentation/widgets/expanded_sensor_card.dart';
+import 'package:iiot_monitoring/src/features/device_detail/presentation/widgets/expanded_tag_card.dart';
 import 'package:iiot_monitoring/src/shared/widgets/iiot_card.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-enum SensorFilter {
+enum TagFilter {
   all('Все'),
   analog('Аналоговые'),
   digital('Цифровые'),
@@ -21,7 +22,7 @@ enum SensorFilter {
   offline('Оффлайн');
 
   final String label;
-  const SensorFilter(this.label);
+  const TagFilter(this.label);
 }
 
 class DeviceDetailScreen extends ConsumerStatefulWidget {
@@ -34,7 +35,7 @@ class DeviceDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
-  SensorFilter _selectedFilter = SensorFilter.all;
+  TagFilter _selectedFilter = TagFilter.all;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
                 );
               }
 
-              final filteredSensors = _getFilteredSensors(calcDevice);
+              final filteredTags = _getFilteredTags(calcDevice);
 
               final List<Widget> items = [
                 const Padding(
@@ -65,7 +66,7 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
                   child:
                       DeviceDetailHeader(
                             device: calcDevice.device.copyWith(
-                              totalSensors: calcDevice.sensors.length,
+                              totalTags: calcDevice.tags.length,
                             ),
                           )
                           .animate()
@@ -75,7 +76,7 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child:
-                      DeviceSensorStatusPanels(
+                      DeviceTagStatusPanels(
                             okCount: calcDevice.summary.normalCount,
                             alertCount: calcDevice.summary.warningCount,
                             criticalCount: calcDevice.summary.criticalCount,
@@ -89,16 +90,16 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
                     .animate()
                     .fadeIn(duration: 300.ms)
                     .slideY(begin: 0.1, curve: Curves.easeOut),
-                if (filteredSensors.isNotEmpty)
-                  ...filteredSensors.asMap().entries.map((entry) {
+                if (filteredTags.isNotEmpty)
+                  ...filteredTags.asMap().entries.map((entry) {
                     final index = entry.key;
-                    final sensor = entry.value;
+                    final tag = entry.value;
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child:
-                          ExpandedSensorCard(
-                                calculatedSensor: sensor,
+                          ExpandedTagCard(
+                                calculatedTag: tag,
                                 onTap: () {},
                               )
                               .animate()
@@ -179,10 +180,10 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         scrollDirection: Axis.horizontal,
-        itemCount: SensorFilter.values.length,
+        itemCount: TagFilter.values.length,
         separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
-          final filter = SensorFilter.values[index];
+          final filter = TagFilter.values[index];
           final isSelected = _selectedFilter == filter;
           return FilterChip(
             label: Text(filter.label),
@@ -205,23 +206,23 @@ class _DeviceDetailScreenState extends ConsumerState<DeviceDetailScreen> {
     );
   }
 
-  List<CalculatedSensor> _getFilteredSensors(CalculatedDevice device) {
-    if (_selectedFilter == SensorFilter.all) return device.sensors;
-    return device.sensors.where((s) {
+  List<CalculatedTag> _getFilteredTags(CalculatedDevice device) {
+    if (_selectedFilter == TagFilter.all) return device.tags;
+    return device.tags.where((s) {
       switch (_selectedFilter) {
-        case SensorFilter.analog:
-          return s.sensor.sensorDataType == 0;
-        case SensorFilter.digital:
-          return s.sensor.sensorDataType == 1;
-        case SensorFilter.ok:
-          return s.evaluation.status == SensorStatus.normal;
-        case SensorFilter.warning:
-          return s.evaluation.status == SensorStatus.warning;
-        case SensorFilter.critical:
-          return s.evaluation.status == SensorStatus.critical;
-        case SensorFilter.offline:
-          return s.evaluation.status == SensorStatus.offline;
-        case SensorFilter.all:
+        case TagFilter.analog:
+          return s.tag.dataType == TagDataType.analogRaw;
+        case TagFilter.digital:
+          return s.tag.dataType == TagDataType.digital;
+        case TagFilter.ok:
+          return s.evaluation.status == TagStatus.normal;
+        case TagFilter.warning:
+          return s.evaluation.status == TagStatus.warning;
+        case TagFilter.critical:
+          return s.evaluation.status == TagStatus.critical;
+        case TagFilter.offline:
+          return s.evaluation.status == TagStatus.offline;
+        case TagFilter.all:
           return true;
       }
     }).toList();

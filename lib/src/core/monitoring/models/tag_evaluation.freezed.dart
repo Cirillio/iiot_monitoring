@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'sensor_evaluation.dart';
+part of 'tag_evaluation.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -12,20 +12,20 @@ part of 'sensor_evaluation.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$SensorEvaluation {
+mixin _$TagEvaluation {
 
- SensorStatus get status; double? get value; DateTime? get alarmStartedAt; String? get message;
-/// Create a copy of SensorEvaluation
+ TagStatus get status; double? get value; DateTime? get alarmStartedAt; String? get message;
+/// Create a copy of TagEvaluation
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SensorEvaluationCopyWith<SensorEvaluation> get copyWith => _$SensorEvaluationCopyWithImpl<SensorEvaluation>(this as SensorEvaluation, _$identity);
+$TagEvaluationCopyWith<TagEvaluation> get copyWith => _$TagEvaluationCopyWithImpl<TagEvaluation>(this as TagEvaluation, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SensorEvaluation&&(identical(other.status, status) || other.status == status)&&(identical(other.value, value) || other.value == value)&&(identical(other.alarmStartedAt, alarmStartedAt) || other.alarmStartedAt == alarmStartedAt)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TagEvaluation&&(identical(other.status, status) || other.status == status)&&(identical(other.value, value) || other.value == value)&&(identical(other.alarmStartedAt, alarmStartedAt) || other.alarmStartedAt == alarmStartedAt)&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -34,18 +34,18 @@ int get hashCode => Object.hash(runtimeType,status,value,alarmStartedAt,message)
 
 @override
 String toString() {
-  return 'SensorEvaluation(status: $status, value: $value, alarmStartedAt: $alarmStartedAt, message: $message)';
+  return 'TagEvaluation(status: $status, value: $value, alarmStartedAt: $alarmStartedAt, message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $SensorEvaluationCopyWith<$Res>  {
-  factory $SensorEvaluationCopyWith(SensorEvaluation value, $Res Function(SensorEvaluation) _then) = _$SensorEvaluationCopyWithImpl;
+abstract mixin class $TagEvaluationCopyWith<$Res>  {
+  factory $TagEvaluationCopyWith(TagEvaluation value, $Res Function(TagEvaluation) _then) = _$TagEvaluationCopyWithImpl;
 @useResult
 $Res call({
- SensorStatus status, double? value, DateTime? alarmStartedAt, String? message
+ TagStatus status, double? value, DateTime? alarmStartedAt, String? message
 });
 
 
@@ -53,19 +53,19 @@ $Res call({
 
 }
 /// @nodoc
-class _$SensorEvaluationCopyWithImpl<$Res>
-    implements $SensorEvaluationCopyWith<$Res> {
-  _$SensorEvaluationCopyWithImpl(this._self, this._then);
+class _$TagEvaluationCopyWithImpl<$Res>
+    implements $TagEvaluationCopyWith<$Res> {
+  _$TagEvaluationCopyWithImpl(this._self, this._then);
 
-  final SensorEvaluation _self;
-  final $Res Function(SensorEvaluation) _then;
+  final TagEvaluation _self;
+  final $Res Function(TagEvaluation) _then;
 
-/// Create a copy of SensorEvaluation
+/// Create a copy of TagEvaluation
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? value = freezed,Object? alarmStartedAt = freezed,Object? message = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as SensorStatus,value: freezed == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as TagStatus,value: freezed == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as double?,alarmStartedAt: freezed == alarmStartedAt ? _self.alarmStartedAt : alarmStartedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,
@@ -75,8 +75,8 @@ as String?,
 }
 
 
-/// Adds pattern-matching-related methods to [SensorEvaluation].
-extension SensorEvaluationPatterns on SensorEvaluation {
+/// Adds pattern-matching-related methods to [TagEvaluation].
+extension TagEvaluationPatterns on TagEvaluation {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -89,10 +89,10 @@ extension SensorEvaluationPatterns on SensorEvaluation {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _SensorEvaluation value)?  $default,{required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _TagEvaluation value)?  $default,{required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _SensorEvaluation() when $default != null:
+case _TagEvaluation() when $default != null:
 return $default(_that);case _:
   return orElse();
 
@@ -111,10 +111,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _SensorEvaluation value)  $default,){
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _TagEvaluation value)  $default,){
 final _that = this;
 switch (_that) {
-case _SensorEvaluation():
+case _TagEvaluation():
 return $default(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -132,10 +132,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _SensorEvaluation value)?  $default,){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _TagEvaluation value)?  $default,){
 final _that = this;
 switch (_that) {
-case _SensorEvaluation() when $default != null:
+case _TagEvaluation() when $default != null:
 return $default(_that);case _:
   return null;
 
@@ -153,9 +153,9 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( SensorStatus status,  double? value,  DateTime? alarmStartedAt,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( TagStatus status,  double? value,  DateTime? alarmStartedAt,  String? message)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _SensorEvaluation() when $default != null:
+case _TagEvaluation() when $default != null:
 return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);case _:
   return orElse();
 
@@ -174,9 +174,9 @@ return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( SensorStatus status,  double? value,  DateTime? alarmStartedAt,  String? message)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( TagStatus status,  double? value,  DateTime? alarmStartedAt,  String? message)  $default,) {final _that = this;
 switch (_that) {
-case _SensorEvaluation():
+case _TagEvaluation():
 return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -194,9 +194,9 @@ return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( SensorStatus status,  double? value,  DateTime? alarmStartedAt,  String? message)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( TagStatus status,  double? value,  DateTime? alarmStartedAt,  String? message)?  $default,) {final _that = this;
 switch (_that) {
-case _SensorEvaluation() when $default != null:
+case _TagEvaluation() when $default != null:
 return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);case _:
   return null;
 
@@ -208,26 +208,26 @@ return $default(_that.status,_that.value,_that.alarmStartedAt,_that.message);cas
 /// @nodoc
 
 
-class _SensorEvaluation extends SensorEvaluation {
-  const _SensorEvaluation({required this.status, this.value, this.alarmStartedAt, this.message}): super._();
+class _TagEvaluation extends TagEvaluation {
+  const _TagEvaluation({required this.status, this.value, this.alarmStartedAt, this.message}): super._();
   
 
-@override final  SensorStatus status;
+@override final  TagStatus status;
 @override final  double? value;
 @override final  DateTime? alarmStartedAt;
 @override final  String? message;
 
-/// Create a copy of SensorEvaluation
+/// Create a copy of TagEvaluation
 /// with the given fields replaced by the non-null parameter values.
 @override @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$SensorEvaluationCopyWith<_SensorEvaluation> get copyWith => __$SensorEvaluationCopyWithImpl<_SensorEvaluation>(this, _$identity);
+_$TagEvaluationCopyWith<_TagEvaluation> get copyWith => __$TagEvaluationCopyWithImpl<_TagEvaluation>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SensorEvaluation&&(identical(other.status, status) || other.status == status)&&(identical(other.value, value) || other.value == value)&&(identical(other.alarmStartedAt, alarmStartedAt) || other.alarmStartedAt == alarmStartedAt)&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TagEvaluation&&(identical(other.status, status) || other.status == status)&&(identical(other.value, value) || other.value == value)&&(identical(other.alarmStartedAt, alarmStartedAt) || other.alarmStartedAt == alarmStartedAt)&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -236,18 +236,18 @@ int get hashCode => Object.hash(runtimeType,status,value,alarmStartedAt,message)
 
 @override
 String toString() {
-  return 'SensorEvaluation(status: $status, value: $value, alarmStartedAt: $alarmStartedAt, message: $message)';
+  return 'TagEvaluation(status: $status, value: $value, alarmStartedAt: $alarmStartedAt, message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$SensorEvaluationCopyWith<$Res> implements $SensorEvaluationCopyWith<$Res> {
-  factory _$SensorEvaluationCopyWith(_SensorEvaluation value, $Res Function(_SensorEvaluation) _then) = __$SensorEvaluationCopyWithImpl;
+abstract mixin class _$TagEvaluationCopyWith<$Res> implements $TagEvaluationCopyWith<$Res> {
+  factory _$TagEvaluationCopyWith(_TagEvaluation value, $Res Function(_TagEvaluation) _then) = __$TagEvaluationCopyWithImpl;
 @override @useResult
 $Res call({
- SensorStatus status, double? value, DateTime? alarmStartedAt, String? message
+ TagStatus status, double? value, DateTime? alarmStartedAt, String? message
 });
 
 
@@ -255,19 +255,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$SensorEvaluationCopyWithImpl<$Res>
-    implements _$SensorEvaluationCopyWith<$Res> {
-  __$SensorEvaluationCopyWithImpl(this._self, this._then);
+class __$TagEvaluationCopyWithImpl<$Res>
+    implements _$TagEvaluationCopyWith<$Res> {
+  __$TagEvaluationCopyWithImpl(this._self, this._then);
 
-  final _SensorEvaluation _self;
-  final $Res Function(_SensorEvaluation) _then;
+  final _TagEvaluation _self;
+  final $Res Function(_TagEvaluation) _then;
 
-/// Create a copy of SensorEvaluation
+/// Create a copy of TagEvaluation
 /// with the given fields replaced by the non-null parameter values.
 @override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? value = freezed,Object? alarmStartedAt = freezed,Object? message = freezed,}) {
-  return _then(_SensorEvaluation(
+  return _then(_TagEvaluation(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as SensorStatus,value: freezed == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
+as TagStatus,value: freezed == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as double?,alarmStartedAt: freezed == alarmStartedAt ? _self.alarmStartedAt : alarmStartedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,

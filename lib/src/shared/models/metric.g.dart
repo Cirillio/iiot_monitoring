@@ -7,15 +7,15 @@ part of 'metric.dart';
 // **************************************************************************
 
 _Metric _$MetricFromJson(Map<String, dynamic> json) => _Metric(
-  sensorId: (json['SensorId'] as num).toInt(),
-  value: (json['Value'] as num).toDouble(),
-  time: DateTime.parse(json['Time'] as String),
-  rawValue: (json['RawValue'] as num?)?.toDouble(),
+  tagId: (json['tagId'] as num).toInt(),
+  value: (json['value'] as num).toDouble(),
+  time: DateTime.parse(json['time'] as String),
+  rawValue: (json['rawValue'] as num?)?.toDouble(),
 );
 
 Map<String, dynamic> _$MetricToJson(_Metric instance) => <String, dynamic>{
-  'SensorId': instance.sensorId,
-  'Value': instance.value,
-  'Time': instance.time.toIso8601String(),
-  'RawValue': instance.rawValue,
+  'tagId': instance.tagId,
+  'value': instance.value,
+  'time': instance.time.toIso8601String(),
+  'rawValue': instance.rawValue,
 };

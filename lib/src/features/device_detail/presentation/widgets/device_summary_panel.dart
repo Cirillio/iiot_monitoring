@@ -8,13 +8,13 @@ import '../../../../shared/widgets/iiot_card.dart';
 /// - [totalCount] — общее количество датчиков
 /// - [okCount] — количество датчиков в норме
 /// - [alertCount] — количество датчиков с тревогами/критических
-class DeviceSensorStatusPanels extends StatelessWidget {
+class DeviceTagStatusPanels extends StatelessWidget {
   final int okCount;
   final int alertCount;
   final int criticalCount;
   final int offlineCount;
 
-  const DeviceSensorStatusPanels({
+  const DeviceTagStatusPanels({
     super.key,
     required this.okCount,
     required this.alertCount,
@@ -113,7 +113,7 @@ class _SummaryItem extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 18,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
           ),
         ),
       ],

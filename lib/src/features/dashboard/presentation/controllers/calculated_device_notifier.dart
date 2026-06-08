@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/calculated_device.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/calculated_tag.dart';
 import 'package:iiot_monitoring/src/core/monitoring/models/device_summary.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/sensor_status.dart';
-import 'package:iiot_monitoring/src/core/monitoring/sensor_evaluator.dart';
-import 'package:iiot_monitoring/src/core/monitoring/sensor_processing_notifier.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/tag_status.dart';
+import 'package:iiot_monitoring/src/core/monitoring/tag_evaluator.dart';
+import 'package:iiot_monitoring/src/core/monitoring/tag_processing_notifier.dart';
 import 'package:iiot_monitoring/src/shared/models/metric.dart';
 import 'package:iiot_monitoring/src/shared/models/dto/device_dto.dart';
 import 'package:iiot_monitoring/src/features/dashboard/data/device_repository.dart';
@@ -81,10 +81,10 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
 
   void _initializeHistory(List<CalculatedDevice> devices) {
     for (var device in devices) {
-      for (var sensor in device.sensors) {
+      for (var tag in device.tags) {
         ref
-            .read(sensorProcessingProvider.notifier)
-            .updateEvaluation(sensor.sensor.sensorId, sensor.evaluation);
+            .read(tagProcessingProvider.notifier)
+            .updateEvaluation(tag.tag.tagId, tag.evaluation);
       }
     }
   }
@@ -101,66 +101,66 @@ class CalculatedDeviceNotifier extends _$CalculatedDeviceNotifier {
 
   void processMetric(Metric metric) {
     state.whenData((devices) {
-      bool sensorFound = false;
+      bool tagFound = false;
       final updatedDevices = devices.map((device) {
-        final sensorIndex = device.sensors.indexWhere(
-          (s) => s.sensor.sensorId == metric.sensorId,
+        final tagIndex = device.tags.indexWhere(
+          (s) => s.tag.tagId == metric.tagId,
         );
 
-        if (sensorIndex == -1) return device;
+        if (tagIndex == -1) return device;
 
-        sensorFound = true;
+        tagFound = true;
         final previousEvaluation = ref.read(
-          sensorProcessingProvider,
-        )[metric.sensorId];
+          tagProcessingProvider,
+        )[metric.tagId];
 
-        final newEvaluation = SensorEvaluator.evaluate(
-          sensor: device.sensors[sensorIndex].sensor,
+        final newEvaluation = TagEvaluator.evaluate(
+          tag: device.tags[tagIndex].tag,
           value: metric.value,
           previousEvaluation: previousEvaluation,
         );
 
         ref
-            .read(sensorProcessingProvider.notifier)
-            .updateEvaluation(metric.sensorId, newEvaluation);
+            .read(tagProcessingProvider.notifier)
+            .updateEvaluation(metric.tagId, newEvaluation);
 
-        final updatedSensors = List<CalculatedSensor>.from(device.sensors);
-        updatedSensors[sensorIndex] = updatedSensors[sensorIndex].copyWith(
+        final updatedTags = List<CalculatedTag>.from(device.tags);
+        updatedTags[tagIndex] = updatedTags[tagIndex].copyWith(
           evaluation: newEvaluation,
         );
 
         return device.copyWith(
-          sensors: updatedSensors,
-          summary: _recalculateSummary(updatedSensors),
+          tags: updatedTags,
+          summary: _recalculateSummary(updatedTags),
         );
       }).toList();
 
-      if (sensorFound) {
+      if (tagFound) {
         state = AsyncData(updatedDevices);
       }
     });
   }
 
-  DeviceSummary _recalculateSummary(List<CalculatedSensor> sensors) {
+  DeviceSummary _recalculateSummary(List<CalculatedTag> tags) {
     int normal = 0, warning = 0, critical = 0, offline = 0, noConfig = 0;
-    for (var s in sensors) {
+    for (var s in tags) {
       switch (s.evaluation.status) {
-        case SensorStatus.normal:
+        case TagStatus.normal:
           normal++;
           break;
-        case SensorStatus.warning:
+        case TagStatus.warning:
           warning++;
           break;
-        case SensorStatus.critical:
+        case TagStatus.critical:
           critical++;
           break;
-        case SensorStatus.offline:
+        case TagStatus.offline:
           offline++;
           break;
-        case SensorStatus.noConfig:
+        case TagStatus.noConfig:
           noConfig++;
           break;
-        case SensorStatus.idle:
+        case TagStatus.idle:
           break;
       }
     }

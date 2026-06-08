@@ -38,7 +38,7 @@ class DeviceDetailHeader extends StatelessWidget {
               // Название устройства
               Expanded(
                 child: Text(
-                  device.name ?? 'unnamed device',
+                  device.name,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,
@@ -58,7 +58,7 @@ class DeviceDetailHeader extends StatelessWidget {
             children: [
               _statCell(
                 context: context,
-                value: device.ipAddress ?? '—',
+                value: device.ipAddress,
                 label: 'IP',
                 labelIcon: LucideIcons.globe,
               ),
@@ -76,7 +76,7 @@ class DeviceDetailHeader extends StatelessWidget {
               ),
               _statCell(
                 context: context,
-                value: '${device.totalSensors}',
+                value: '${device.totalTags}',
                 label: 'Датчиков',
                 labelIcon: LucideIcons.cpu,
               ),

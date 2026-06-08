@@ -1,12 +1,12 @@
 import '../../../core/monitoring/models/calculated_device.dart';
-import '../../../core/monitoring/models/calculated_sensor.dart';
+import '../../../core/monitoring/models/calculated_tag.dart';
 import '../../../core/monitoring/models/device_summary.dart';
-import '../../../core/monitoring/models/sensor_evaluation.dart';
-import '../../../core/monitoring/models/sensor_status.dart';
+import '../../../core/monitoring/models/tag_evaluation.dart';
+import '../../../core/monitoring/models/tag_status.dart';
 import '../../../shared/models/device.dart';
-import '../../../shared/models/sensor.dart';
+import '../../../shared/models/tag.dart';
 import '../../../shared/models/dto/device_dto.dart';
-import '../../../shared/models/dto/sensor_dto.dart';
+import '../../../shared/models/dto/tag_dto.dart';
 
 class Mapper {
   static CalculatedDevice toCalculatedDevice(DeviceDto dto) {
@@ -17,52 +17,56 @@ class Mapper {
       port: dto.port,
       slaveId: dto.slaveId,
       isActive: dto.isActive,
+      connectionId: dto.connectionId,
+      useGroupPolling: dto.useGroupPolling,
+      maxRegisterSpan: dto.maxRegisterSpan,
+      isOnline: dto.isOnline,
       createdAt: dto.createdAt,
     );
 
-    final sensors = dto.sensors.map((s) => toCalculatedSensor(s)).toList();
+    final tags = dto.tags.map((s) => toCalculatedTag(s)).toList();
 
     return CalculatedDevice(
       device: device,
-      sensors: sensors,
-      summary: _calculateSummary(sensors),
+      tags: tags,
+      summary: _calculateSummary(tags),
     );
   }
 
-  static CalculatedSensor toCalculatedSensor(SensorDto dto) {
-    final sensor = Sensor(
-      sensorId: dto.sensorId,
+  static CalculatedTag toCalculatedTag(TagDto dto) {
+    final tag = Tag(
+      tagId: dto.tagId,
       deviceId: dto.deviceId,
       portNumber: dto.portNumber,
       name: dto.name,
       slug: dto.slug,
-      sensorDataType: dto.sensorDataType,
+      dataType: dto.dataType,
       unit: dto.unit,
       uiConfigJson: dto.uiConfigJson,
       updatedAt: dto.updatedAt,
     );
 
-    return CalculatedSensor(
-      sensor: sensor,
-      evaluation: SensorEvaluation.idle(),
+    return CalculatedTag(
+      tag: tag,
+      evaluation: TagEvaluation.idle(),
     );
   }
 
-  static DeviceSummary _calculateSummary(List<CalculatedSensor> sensors) {
+  static DeviceSummary _calculateSummary(List<CalculatedTag> tags) {
     int normal = 0, warning = 0, critical = 0, offline = 0, noConfig = 0;
-    for (var s in sensors) {
+    for (var s in tags) {
       switch (s.evaluation.status) {
-        case SensorStatus.normal:
+        case TagStatus.normal:
           normal++;
-        case SensorStatus.warning:
+        case TagStatus.warning:
           warning++;
-        case SensorStatus.critical:
+        case TagStatus.critical:
           critical++;
-        case SensorStatus.offline:
+        case TagStatus.offline:
           offline++;
-        case SensorStatus.noConfig:
+        case TagStatus.noConfig:
           noConfig++;
-        case SensorStatus.idle:
+        case TagStatus.idle:
           break;
       }
     }

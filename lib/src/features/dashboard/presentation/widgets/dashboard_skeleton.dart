@@ -79,7 +79,7 @@ class DeviceCardSkeleton extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            // Sensors Grid Skeleton (2x2)
+            // Tags Grid Skeleton (2x2)
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -88,16 +88,16 @@ class DeviceCardSkeleton extends StatelessWidget {
               crossAxisSpacing: 6,
               childAspectRatio: 0.85,
               children: const [
-                SensorCardSkeleton(),
-                SensorCardSkeleton(),
-                SensorCardSkeleton(),
-                SensorCardSkeleton(),
+                TagCardSkeleton(),
+                TagCardSkeleton(),
+                TagCardSkeleton(),
+                TagCardSkeleton(),
               ],
             ),
 
             const SizedBox(height: 12),
 
-            // Total sensors text skeleton
+            // Total tags text skeleton
             Container(
               width: 120,
               height: 12,
@@ -128,8 +128,8 @@ class DeviceCardSkeleton extends StatelessWidget {
   }
 }
 
-class SensorCardSkeleton extends StatelessWidget {
-  const SensorCardSkeleton({super.key});
+class TagCardSkeleton extends StatelessWidget {
+  const TagCardSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {

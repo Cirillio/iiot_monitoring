@@ -8,31 +8,43 @@ part of 'device_dto.dart';
 
 _DeviceDto _$DeviceDtoFromJson(Map<String, dynamic> json) => _DeviceDto(
   id: (json['id'] as num).toInt(),
-  name: json['name'] as String?,
-  ipAddress: json['ipAddress'] as String?,
-  port: (json['port'] as num?)?.toInt(),
-  slaveId: (json['slaveId'] as num?)?.toInt(),
-  isActive: json['isActive'] as bool,
+  name: json['name'] as String? ?? "Unnamed Device",
+  connectionId: (json['connectionId'] as num).toInt(),
+  ipAddress: json['ipAddress'] as String? ?? "127.0.0.1",
+  port: (json['port'] as num).toInt(),
+  slaveId: (json['slaveId'] as num).toInt(),
+  useGroupPolling: json['useGroupPolling'] as bool? ?? true,
+  maxRegisterSpan: (json['maxRegisterSpan'] as num?)?.toInt() ?? 120,
+  isActive: json['isActive'] as bool? ?? false,
+  isOnline: json['isOnline'] as bool? ?? false,
+  lastSeen: json['lastSeen'] == null
+      ? null
+      : DateTime.parse(json['lastSeen'] as String),
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
-  sensors:
-      (json['sensors'] as List<dynamic>?)
-          ?.map((e) => SensorDto.fromJson(e as Map<String, dynamic>))
+  tags:
+      (json['tags'] as List<dynamic>?)
+          ?.map((e) => TagDto.fromJson(e as Map<String, dynamic>))
           .toList() ??
       const [],
-  totalSensors: (json['totalSensors'] as num?)?.toInt() ?? 0,
+  totalTags: (json['totalTags'] as num?)?.toInt() ?? 0,
 );
 
 Map<String, dynamic> _$DeviceDtoToJson(_DeviceDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'connectionId': instance.connectionId,
       'ipAddress': instance.ipAddress,
       'port': instance.port,
       'slaveId': instance.slaveId,
+      'useGroupPolling': instance.useGroupPolling,
+      'maxRegisterSpan': instance.maxRegisterSpan,
       'isActive': instance.isActive,
+      'isOnline': instance.isOnline,
+      'lastSeen': instance.lastSeen?.toIso8601String(),
       'createdAt': instance.createdAt?.toIso8601String(),
-      'sensors': instance.sensors,
-      'totalSensors': instance.totalSensors,
+      'tags': instance.tags,
+      'totalTags': instance.totalTags,
     };

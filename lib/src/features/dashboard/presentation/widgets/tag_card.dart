@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:iiot_monitoring/src/shared/models/enums.dart';
 import 'package:exui/exui.dart';
 import 'package:material_symbols_icons/get.dart';
-import 'package:iiot_monitoring/src/core/monitoring/models/calculated_sensor.dart';
-import 'package:iiot_monitoring/src/core/monitoring/extensions/sensor_status_ui.dart';
+import 'package:iiot_monitoring/src/core/monitoring/models/calculated_tag.dart';
+import 'package:iiot_monitoring/src/core/monitoring/extensions/tag_status_ui.dart';
 
-class SensorCard extends StatefulWidget {
-  final CalculatedSensor sensor;
+class TagCard extends StatefulWidget {
+  final CalculatedTag tag;
 
-  const SensorCard({super.key, required this.sensor});
+  const TagCard({super.key, required this.tag});
 
   @override
-  State<SensorCard> createState() => _SensorCardState();
+  State<TagCard> createState() => _TagCardState();
 }
 
-class _SensorCardState extends State<SensorCard> {
+class _TagCardState extends State<TagCard> {
   late final WidgetStatesController _statesController;
 
   @override
@@ -38,13 +39,13 @@ class _SensorCardState extends State<SensorCard> {
   }
 
   String _getDisplayValue() {
-    final evaluation = widget.sensor.evaluation;
-    final sensor = widget.sensor.sensor;
-    final config = sensor.uiConfigJson;
+    final evaluation = widget.tag.evaluation;
+    final tag = widget.tag.tag;
+    final config = tag.uiConfigJson;
 
     if (evaluation.value == null) return '--';
 
-    if (sensor.sensorDataType == 1) {
+    if (tag.dataType == TagDataType.digital) {
       if (evaluation.value == 0 && config?.labelZero != null) {
         return config!.labelZero!;
       }
@@ -54,16 +55,16 @@ class _SensorCardState extends State<SensorCard> {
       return evaluation.value!.toStringAsFixed(0);
     }
 
-    return '${evaluation.value!.toStringAsFixed(1)} ${sensor.unit ?? ''}';
+    return '${evaluation.value!.toStringAsFixed(1)} ${tag.unit}';
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final evaluation = widget.sensor.evaluation;
-    final sensor = widget.sensor.sensor;
+    final evaluation = widget.tag.evaluation;
+    final tag = widget.tag.tag;
     final statusColor = evaluation.status.color;
-    final iconColor = _parseHexColor(sensor.uiConfigJson?.color);
+    final iconColor = _parseHexColor(tag.uiConfigJson?.color);
 
     return ListenableBuilder(
       listenable: _statesController,
@@ -96,7 +97,7 @@ class _SensorCardState extends State<SensorCard> {
                 [
                   Icon(
                     SymbolsGet.get(
-                      sensor.uiConfigJson?.icon ?? 'sensors',
+                      tag.uiConfigJson?.icon ?? 'tags',
                       SymbolStyle.rounded,
                     ),
                     color: iconColor,
@@ -105,7 +106,7 @@ class _SensorCardState extends State<SensorCard> {
                   Expanded(
                     child: [
                       Text(
-                        sensor.name ?? "Unknown sensor",
+                        tag.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13,
@@ -113,7 +114,7 @@ class _SensorCardState extends State<SensorCard> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        sensor.sensorDataType == 0 ? 'Аналоговый' : 'Цифровой',
+                        tag.dataType == TagDataType.analogRaw ? 'Аналоговый' : 'Цифровой',
                         style: TextStyle(
                           fontSize: 10,
                           color: theme.colorScheme.onSurface.withValues(
@@ -151,7 +152,7 @@ class _SensorCardState extends State<SensorCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Port: ${sensor.portNumber}',
+                        'Port: ${tag.portNumber}',
                         style: TextStyle(
                           fontSize: 12,
                           color: theme.colorScheme.onSurface.withValues(

@@ -1,13 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'sensor_ui_config.freezed.dart';
-part 'sensor_ui_config.g.dart';
+part 'tag_ui_config.freezed.dart';
+part 'tag_ui_config.g.dart';
 
 @freezed
-abstract class SensorUiConfig with _$SensorUiConfig {
-  const SensorUiConfig._();
+abstract class TagUiConfig with _$TagUiConfig {
+  const TagUiConfig._();
 
-  const factory SensorUiConfig({
+  const factory TagUiConfig({
     String? color,
     String? icon,
     double? minCritical,
@@ -19,8 +19,8 @@ abstract class SensorUiConfig with _$SensorUiConfig {
     double? digitalCritical,
     String? labelZero,
     String? labelOne,
-  }) = _SensorUiConfig;
+  }) = _TagUiConfig;
 
-  factory SensorUiConfig.fromJson(Map<String, dynamic> json) =>
-      _$SensorUiConfigFromJson(json);
+  factory TagUiConfig.fromJson(Map<String, dynamic> json) =>
+      _$TagUiConfigFromJson(json);
 }

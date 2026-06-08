@@ -1,12 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import '../storage/prefs_provider.dart';
 
 part 'api_client.g.dart';
 
 @riverpod
-// String baseUrl(Ref ref) => 'http://10.0.2.2:5000';
-String baseUrl(Ref ref) => 'http://10.88.150.2:5000';
-// String baseUrl(Ref ref) => 'http://192.168.0.13:5000';
+class BaseUrl extends _$BaseUrl {
+  static const _key = 'backend_base_url';
+
+  @override
+  String build() {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    return prefs.getString(_key) ?? 'http://10.0.2.2:5000';
+  }
+
+  Future<void> setUrl(String url) async {
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setString(_key, url);
+    state = url;
+  }
+}
 
 @riverpod
 Dio dio(Ref ref) {
